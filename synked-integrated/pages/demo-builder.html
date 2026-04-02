@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>System Builder — Synked.ai</title>
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/services.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --night:      #0C1A12;
+      --night-surf: #102018;
+      --night-bord: #1C3528;
+      --night-mid:  #3A6650;
+      --night-hi:   #A8D4BC;
+      --night-mono: #6BB89A;
+      --bone:       #EBDCC8;
+      --emerald:    #125842;
+      --pistachio:  #7F8C43;
+      --espresso:   #3F2A1C;
+    }
+
+    .disclaimer-banner {
+      background:linear-gradient(135deg,rgba(127,140,67,.1),rgba(18,88,66,.1));
+      border-bottom:1px solid rgba(127,140,67,.22);
+      padding:.9rem 5vw; display:flex; align-items:flex-start; gap:.8rem;
+      margin-top:var(--nav-h);
+    }
+    .disc-text { font-size:.79rem; line-height:1.6; color:rgba(63,42,28,.62); }
+    .disc-text strong { color:var(--emerald); }
+
+    .demo-hero { background:var(--night); padding:4.5rem 5vw 3rem; position:relative; overflow:hidden; }
+    .demo-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 75% 50%,rgba(127,140,67,.12) 0%,transparent 55%); pointer-events:none; }
+    .demo-hero-inner { max-width:1100px; margin:0 auto; position:relative; z-index:1; }
+    .section-label { font-family:'Space Mono',monospace; font-size:.63rem; letter-spacing:.22em; text-transform:uppercase; color:var(--pistachio); display:block; margin-bottom:.9rem; }
+    .demo-hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(2.6rem,5.5vw,4.5rem); font-weight:300; line-height:1.1; color:var(--bone); margin-bottom:1rem; }
+    .demo-hero h1 em { font-style:italic; color:var(--night-hi); }
+    .demo-hero p { font-size:.98rem; color:rgba(235,220,200,.5); max-width:520px; line-height:1.75; margin-bottom:1.5rem; }
+    .hero-chips { display:flex; flex-wrap:wrap; gap:.5rem; }
+    .hero-chip { background:rgba(235,220,200,.06); border:1px solid var(--night-bord); color:var(--night-mono); font-family:'Space Mono',monospace; font-size:.59rem; letter-spacing:.1em; text-transform:uppercase; padding:.33rem .75rem; border-radius:2px; }
+
+    .explainer-band { background:var(--espresso); padding:3rem 5vw; border-bottom:1px solid rgba(235,220,200,.05); }
+    .explainer-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; }
+    @media(max-width:860px){ .explainer-inner{grid-template-columns:1fr} }
+    .expl-card { background:rgba(235,220,200,.05); border:1px solid rgba(235,220,200,.08); border-radius:4px; padding:1.5rem; }
+    .expl-card .ec-ico { font-size:1.4rem; margin-bottom:.65rem; }
+    .expl-card h4 { font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:var(--bone); margin-bottom:.45rem; }
+    .expl-card p { font-size:.83rem; color:rgba(235,220,200,.52); line-height:1.6; }
+
+    /* ── BUILDER ── */
+    .builder-section { padding:4rem 5vw 5rem; background:var(--night); }
+    .builder-inner { max-width:1100px; margin:0 auto; }
+    .builder-header { margin-bottom:2rem; }
+    .builder-header h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.7rem,3vw,2.4rem); font-weight:300; color:var(--bone); line-height:1.2; margin-bottom:.35rem; }
+    .builder-header h2 em { font-style:italic; color:var(--night-hi); }
+    .builder-header p { font-size:.85rem; color:rgba(235,220,200,.38); max-width:520px; line-height:1.6; }
+
+    .builder-layout { display:grid; grid-template-columns:190px 1fr; gap:1.2rem; }
+    @media(max-width:700px){ .builder-layout{grid-template-columns:1fr} }
+
+    /* palette */
+    .palette-panel { background:var(--night-surf); border:1px solid var(--night-bord); border-radius:4px; padding:.9rem; }
+    .palette-heading { font-family:'Space Mono',monospace; font-size:.58rem; letter-spacing:.16em; text-transform:uppercase; color:var(--night-mono); margin-bottom:.7rem; opacity:.7; }
+    .palette-item { background:var(--night); border:1px solid rgba(235,220,200,.07); border-left:3px solid var(--ac,var(--emerald)); border-radius:3px; padding:.55rem .75rem; margin-bottom:.45rem; cursor:grab; user-select:none; transition:background .15s,transform .15s; }
+    .palette-item:hover { background:rgba(235,220,200,.05); transform:translateX(3px); }
+    .palette-item:active { cursor:grabbing; }
+    .palette-item-name { font-size:.73rem; font-weight:500; color:var(--bone); }
+    .palette-item-desc { font-size:.63rem; color:var(--night-mono); margin-top:.12rem; }
+    .palette-hint { margin-top:.6rem; font-family:'Space Mono',monospace; font-size:.56rem; color:var(--night-mid); line-height:1.9; letter-spacing:.05em; }
+
+    /* canvas */
+    .canvas-panel { display:flex; flex-direction:column; gap:.75rem; }
+    #builder-board {
+      position:relative; height:380px;
+      background:radial-gradient(ellipse at 50% 50%,rgba(18,88,66,.07) 0%,transparent 65%), var(--night-surf);
+      border:1.5px dashed var(--night-bord); border-radius:4px;
+      overflow:hidden; transition:border-color .4s, box-shadow .4s; cursor:default;
+    }
+    #builder-board.drag-over { border-color:var(--night-mid); }
+    #builder-board.synked {
+      border:1.5px solid var(--pistachio);
+      box-shadow:0 0 40px rgba(127,140,67,.12), inset 0 0 60px rgba(18,88,66,.08);
+    }
+    .board-hint { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+    .board-hint span { font-family:'Space Mono',monospace; font-size:.68rem; color:var(--night-mid); letter-spacing:.1em; }
+    .connect-toast { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); background:var(--night-mid); color:var(--bone); font-family:'Space Mono',monospace; font-size:.62rem; padding:.38rem .85rem; border-radius:2px; letter-spacing:.05em; pointer-events:none; white-space:nowrap; }
+    #builder-svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+    #nodes-layer { position:absolute; inset:0; }
+
+    .builder-node { position:absolute; width:90px; height:64px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; border-radius:4px; border:1.5px solid; cursor:pointer; user-select:none; transition:box-shadow .25s,border-color .4s,background .4s; }
+    .builder-node .ni { font-size:1.1rem; }
+    .builder-node .nl { font-family:'Space Mono',monospace; font-size:.51rem; letter-spacing:.08em; color:var(--bone); text-align:center; }
+    .builder-node .nr { position:absolute; top:3px; right:5px; background:none; border:none; color:var(--night-mid); font-size:.72rem; cursor:pointer; line-height:1; padding:0; }
+    .builder-node .nr:hover { color:var(--bone); }
+    .builder-node.sel-node { box-shadow:0 0 0 2.5px var(--pistachio); }
+    .builder-node.synked-node { box-shadow:0 0 14px rgba(127,140,67,.4); }
+
+    .builder-actions { display:flex; gap:.8rem; align-items:center; flex-wrap:wrap; }
+    .btn-synk { background:var(--emerald); color:white; border:2px solid var(--emerald); padding:.58rem 1.45rem; font-family:'Space Mono',monospace; font-size:.7rem; letter-spacing:.11em; text-transform:uppercase; border-radius:2px; cursor:pointer; transition:all .2s; }
+    .btn-synk:hover:not(:disabled){ background:transparent; color:var(--pistachio); border-color:var(--pistachio); }
+    .btn-synk:disabled { opacity:.32; cursor:not-allowed; }
+    .btn-sm-ghost { background:none; border:1px solid var(--night-bord); color:var(--night-mono); padding:.48rem .95rem; font-size:.68rem; font-family:'Space Mono',monospace; border-radius:2px; cursor:pointer; transition:border-color .2s,color .2s; }
+    .btn-sm-ghost:hover { border-color:var(--night-mid); color:var(--bone); }
+    .synk-ok { font-family:'Space Mono',monospace; font-size:.68rem; color:var(--pistachio); letter-spacing:.07em; }
+
+    /* ── METRICS ── */
+    #metrics-container { margin-top:1.2rem; }
+    .metrics-intro { font-family:'Space Mono',monospace; font-size:.58rem; letter-spacing:.14em; text-transform:uppercase; color:var(--night-mono); margin-bottom:.8rem; }
+    .metrics-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(155px,1fr)); gap:.75rem; }
+    .metric-card { background:var(--night-surf); border:1px solid var(--night-bord); border-radius:4px; padding:.95rem 1.1rem; animation:fadeUp .4s ease both; }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .metric-label { font-family:'Space Mono',monospace; font-size:.56rem; letter-spacing:.12em; text-transform:uppercase; color:var(--night-mono); margin-bottom:.35rem; }
+    .metric-val { font-family:'Space Mono',monospace; font-size:1.05rem; font-weight:700; color:var(--pistachio); }
+    .metric-sub { font-size:.7rem; color:rgba(235,220,200,.35); margin-top:.22rem; line-height:1.4; }
+    .metric-card.optim { border-color:rgba(127,140,67,.25); }
+    .optim-item { font-size:.77rem; color:rgba(235,220,200,.65); padding-left:.9rem; position:relative; margin-bottom:.28rem; line-height:1.45; }
+    .optim-item::before { content:'↳'; position:absolute; left:0; color:var(--pistachio); font-size:.7rem; }
+
+    /* synk animation overlay pulse */
+    .synk-pulse { position:absolute; inset:0; pointer-events:none; z-index:10; display:none; }
+    .synk-pulse.active { display:block; animation:pulseFade 1.2s ease forwards; }
+    @keyframes pulseFade{0%{background:rgba(127,140,67,.0)}40%{background:rgba(127,140,67,.08)}100%{background:rgba(127,140,67,.0)}}
+
+    /* ── BEHIND ── */
+    .behind-section { padding:4rem 5vw; background:var(--espresso); border-top:1px solid rgba(235,220,200,.05); }
+    .behind-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+    @media(max-width:860px){ .behind-inner{grid-template-columns:1fr;gap:2rem} }
+    .behind-left h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,3.5vw,2.8rem); font-weight:300; color:var(--bone); line-height:1.2; margin-bottom:.85rem; }
+    .behind-left h2 em { font-style:italic; color:#E08080; }
+    .behind-left p { font-size:.88rem; color:rgba(235,220,200,.52); line-height:1.75; margin-bottom:.85rem; }
+    .step-list { list-style:none; display:flex; flex-direction:column; gap:.9rem; margin-top:1.1rem; counter-reset:steps; }
+    .step-list li { font-size:.87rem; color:rgba(235,220,200,.7); padding-left:2rem; position:relative; line-height:1.5; counter-increment:steps; }
+    .step-list li::before { content:counter(steps); position:absolute; left:0; width:1.35rem; height:1.35rem; background:rgba(18,88,66,.4); border:1px solid var(--emerald); color:var(--night-hi); font-family:'Space Mono',monospace; font-size:.6rem; display:flex; align-items:center; justify-content:center; border-radius:2px; top:.05rem; }
+    .behind-right { display:flex; flex-direction:column; gap:.9rem; }
+    .q-card { background:rgba(235,220,200,.05); border:1px solid rgba(235,220,200,.07); border-left:3px solid var(--pistachio); border-radius:0 4px 4px 0; padding:1.2rem 1.4rem; }
+    .q-card p { font-family:'Cormorant Garamond',serif; font-size:1.08rem; font-style:italic; color:var(--bone); line-height:1.6; }
+    .q-source { font-family:'Space Mono',monospace; font-size:.57rem; letter-spacing:.1em; text-transform:uppercase; color:var(--night-mono); margin-top:.65rem; }
+
+    .demo-cta { padding:4rem 5vw; background:var(--night); border-top:1px solid var(--night-bord); text-align:center; }
+    .demo-cta h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.7rem,4vw,2.6rem); font-weight:300; color:var(--bone); margin-bottom:.65rem; }
+    .demo-cta p { font-size:.9rem; color:rgba(235,220,200,.42); margin-bottom:1.7rem; }
+    .btn-primary { background:var(--emerald); color:white; padding:.78rem 1.9rem; border-radius:2px; font-size:.82rem; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; font-weight:500; transition:all .2s; display:inline-block; border:2px solid var(--emerald); cursor:pointer; font-family:'DM Sans',sans-serif; }
+    .btn-primary:hover{ background:transparent; color:var(--emerald); }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <a href="../index.html" class="nav-logo">
+      <img src="../assets/logo.png" alt="Synked.ai" class="nav-logo-img" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="demo-builder.html" class="active">System Builder</a></li>
+      <li><a href="demo-dashboard.html">Dashboard</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="contact.html" class="nav-cta">Get Started</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+    <a href="demo-builder.html">System Builder</a>
+    <a href="demo-dashboard.html">Dashboard</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <div class="disclaimer-banner">
+    <span>⚙️</span>
+    <div class="disc-text">
+      <strong>Concept demo — not a real pricing tool.</strong>
+      This builder illustrates how we design and connect your AI system. Cost estimates, latency figures and optimisation suggestions are simulated examples. Real system designs and pricing are scoped individually per client.
+    </div>
+  </div>
+
+  <section class="demo-hero">
+    <div class="demo-hero-inner">
+      <span class="section-label">System Builder</span>
+      <h1>Build Your Agent<br/>System <em>Live</em></h1>
+      <p>Drag components onto the canvas, connect them, then hit ⚡ Synk — and watch your architecture come alive with animated data flow, live metrics, and optimisation insights.</p>
+      <div class="hero-chips">
+        <span class="hero-chip">🧠 LLM Orchestration</span>
+        <span class="hero-chip">🔗 Live Connections</span>
+        <span class="hero-chip">⚡ Animated Data Flow</span>
+        <span class="hero-chip">📊 Live Cost & Latency</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="explainer-band">
+    <div class="explainer-inner">
+      <div class="expl-card">
+        <div class="ec-ico">🧩</div>
+        <h4>Drag & connect</h4>
+        <p>Drop AI components onto the canvas — LLM core, RAG system, API layers, caches. Click two nodes to wire them together and form your architecture.</p>
+      </div>
+      <div class="expl-card">
+        <div class="ec-ico">⚡</div>
+        <h4>Hit Synk — watch it live</h4>
+        <p>Click Synk System and watch: animated data pulses travel your connections, nodes glow, and live cost & latency metrics count up in real time. The canvas becomes your system.</p>
+      </div>
+      <div class="expl-card">
+        <div class="ec-ico">💼</div>
+        <h4>What this means for you</h4>
+        <p>You don't need to figure out what to build or how. We take your current tools and turn them into one clean integrated system — built, deployed and managed by us.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="builder-section">
+    <div class="builder-inner">
+      <div class="builder-header">
+        <span class="section-label">Interactive Demo — Simulated Outputs</span>
+        <h2>Build Your Agent System <em>Live</em></h2>
+        <p>Drag components from the panel → click two nodes to connect them → hit ⚡ Synk to see your architecture animated with live data flow and metrics.</p>
+      </div>
+
+      <div class="builder-layout">
+        <div class="palette-panel">
+          <div class="palette-heading">Components</div>
+          <div class="palette-item" draggable="true" data-bid="llm" style="--ac:#125842"><div class="palette-item-name">🧠 LLM Core</div><div class="palette-item-desc">Language model node</div></div>
+          <div class="palette-item" draggable="true" data-bid="rag" style="--ac:#7F8C43"><div class="palette-item-name">📚 RAG System</div><div class="palette-item-desc">Knowledge retrieval</div></div>
+          <div class="palette-item" draggable="true" data-bid="api" style="--ac:#B089AA"><div class="palette-item-name">🔌 API Layer</div><div class="palette-item-desc">External integrations</div></div>
+          <div class="palette-item" draggable="true" data-bid="cache" style="--ac:#6B8FA8"><div class="palette-item-name">⚡ Cache</div><div class="palette-item-desc">Fast response store</div></div>
+          <div class="palette-item" draggable="true" data-bid="queue" style="--ac:#A86B3A"><div class="palette-item-name">📬 Queue</div><div class="palette-item-desc">Async job handling</div></div>
+          <div class="palette-item" draggable="true" data-bid="embed" style="--ac:#3A6B8F"><div class="palette-item-name">🔢 Embeddings</div><div class="palette-item-desc">Vector search</div></div>
+          <div class="palette-hint">↳ Drag to canvas<br/>↳ Click nodes to connect<br/>↳ Hit ⚡ Synk to animate</div>
+        </div>
+
+        <div class="canvas-panel">
+          <div id="builder-board">
+            <div class="synk-pulse" id="synk-pulse"></div>
+            <div class="board-hint" id="board-hint"><span>Drop components here</span></div>
+            <svg id="builder-svg"></svg>
+            <div id="nodes-layer"></div>
+            <div class="connect-toast" id="connect-toast" style="display:none">Click another node to connect ↗</div>
+          </div>
+          <div class="builder-actions">
+            <button class="btn-synk" id="btn-synk" disabled>⚡ Synk System</button>
+            <button class="btn-sm-ghost" id="btn-reset">Reset</button>
+            <span class="synk-ok" id="synk-ok" style="display:none">✦ System synked</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="metrics-container"></div>
+    </div>
+  </section>
+
+  <section class="behind-section">
+    <div class="behind-inner">
+      <div class="behind-left">
+        <span class="section-label">Behind the Demo</span>
+        <h2>We build it.<br/>We connect it.<br/><em>You own it.</em></h2>
+        <p>The builder mirrors our actual process. We map your existing tools, identify gaps, and design a unified AI system — no guesswork, no generic templates.</p>
+        <p>Every component you place on that canvas represents real infrastructure we design, build and integrate. Here's how a real engagement looks:</p>
+        <ol class="step-list">
+          <li>Discovery call — we map your tools, workflows and goals</li>
+          <li>Architecture design — we propose a custom system (like this builder, but real)</li>
+          <li>Build & deploy — we construct, test and go live</li>
+          <li>Monitor & optimise — ongoing management via the dashboard</li>
+        </ol>
+      </div>
+      <div class="behind-right">
+        <div class="q-card">
+          <p>"I don't need to figure this out — they will set everything up properly."</p>
+          <div class="q-source">— What clients tell us after onboarding</div>
+        </div>
+        <div class="q-card" style="border-left-color:#E08080;">
+          <p>"The cost and latency estimates shown here are illustrative. Real pricing depends on your stack, usage volume and the components we actually build."</p>
+          <div class="q-source">— A note from us</div>
+        </div>
+        <div class="q-card" style="border-left-color:var(--night-hi);">
+          <p>"Think of this builder as a sketch pad — a way to visualise what's possible before we design the real thing together."</p>
+          <div class="q-source">— What this demo is</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo-cta">
+    <h2>Ready to build your real system?</h2>
+    <p>Tell us what you're working with — we'll design the architecture and take it from there.</p>
+    <a href="contact.html" class="btn-primary">Start the Conversation</a>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-name">Synked.ai</div>
+        <p>Sync Your Business with AI.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h5>Company</h5>
+          <a href="about.html">About</a>
+          <a href="services.html">Services</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h5>Demos</h5>
+          <a href="demo-builder.html">System Builder</a>
+          <a href="demo-dashboard.html">Agent Dashboard</a>
+        </div>
+        <div class="footer-col">
+          <h5>Services</h5>
+          <a href="services.html#agents">AI Agents</a>
+          <a href="services.html#rag">RAG Systems</a>
+          <a href="services.html#workflow">Workflow Automation</a>
+          <a href="services.html#management">AI Management</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Synked.ai — All rights reserved.</p>
+      <p>hello@synked.ai</p>
+    </div>
+  </footer>
+
+  <script src="../js/animations.js"></script>
+  <script>
+  (function(){
+    // ── NODE CONFIG ──────────────────────────────────────────────────────────
+    const BT = {
+      llm:   {icon:'🧠', label:'LLM Core',    color:'#125842', cost:0.042, lat:380},
+      rag:   {icon:'📚', label:'RAG System',   color:'#7F8C43', cost:0.018, lat:210},
+      api:   {icon:'🔌', label:'API Layer',    color:'#B089AA', cost:0.006, lat:95 },
+      cache: {icon:'⚡', label:'Cache',         color:'#6B8FA8', cost:0.001, lat:12 },
+      queue: {icon:'📬', label:'Queue',         color:'#A86B3A', cost:0.003, lat:45 },
+      embed: {icon:'🔢', label:'Embeddings',   color:'#3A6B8F', cost:0.009, lat:120},
+    };
+
+    const board     = document.getElementById('builder-board');
+    const svgEl     = document.getElementById('builder-svg');
+    const nodesL    = document.getElementById('nodes-layer');
+    const hint      = document.getElementById('board-hint');
+    const toast     = document.getElementById('connect-toast');
+    const btnSynk   = document.getElementById('btn-synk');
+    const btnReset  = document.getElementById('btn-reset');
+    const synkOk    = document.getElementById('synk-ok');
+    const metricsCt = document.getElementById('metrics-container');
+    const pulse     = document.getElementById('synk-pulse');
+
+    let placed = [], conns = [], selNode = null, dragIdx = null, dOff = {x:0,y:0};
+    let isSynked = false, nodeCount = 0, animFrames = [];
+
+    // ── HELPERS ──────────────────────────────────────────────────────────────
+    function ctr(idx){ const n=placed[idx]; return n?{x:n.x+45,y:n.y+32}:{x:0,y:0}; }
+
+    // ── SVG DRAW ─────────────────────────────────────────────────────────────
+    function drawSVG(){
+      // cancel running animations
+      animFrames.forEach(id=>cancelAnimationFrame(id));
+      animFrames = [];
+      while(svgEl.firstChild) svgEl.removeChild(svgEl.firstChild);
+
+      conns.forEach(([a,b],i)=>{
+        if(!placed[a]||!placed[b]) return;
+        const p1=ctr(a), p2=ctr(b);
+        const mx=(p1.x+p2.x)/2, my=(p1.y+p2.y)/2;
+        const d=`M${p1.x},${p1.y} Q${mx},${my-22} ${p2.x},${p2.y}`;
+
+        // path
+        const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+        path.setAttribute('d',d);
+        path.setAttribute('fill','none');
+        path.setAttribute('stroke', isSynked?'#7F8C43':'#3A6650');
+        path.setAttribute('stroke-width', isSynked?'1.8':'0.9');
+        if(!isSynked) path.setAttribute('stroke-dasharray','4 4');
+        svgEl.appendChild(path);
+
+        if(isSynked){
+          // animated travelling dot per connection
+          const dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
+          dot.setAttribute('r','4');
+          dot.setAttribute('fill', placed[a]?BT[placed[a].bid]?.color||'#7F8C43':'#7F8C43');
+          dot.setAttribute('opacity','0.9');
+          const anim=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
+          anim.setAttribute('dur', `${0.9+i*0.2}s`);
+          anim.setAttribute('repeatCount','indefinite');
+          anim.setAttribute('path',d);
+          dot.appendChild(anim);
+          svgEl.appendChild(dot);
+
+          // trailing glow dot
+          const glow=document.createElementNS('http://www.w3.org/2000/svg','circle');
+          glow.setAttribute('r','7');
+          glow.setAttribute('fill', placed[a]?BT[placed[a].bid]?.color||'#7F8C43':'#7F8C43');
+          glow.setAttribute('opacity','0.2');
+          const anim2=document.createElementNS('http://www.w3.org/2000/svg','animateMotion');
+          anim2.setAttribute('dur', `${0.9+i*0.2}s`);
+          anim2.setAttribute('repeatCount','indefinite');
+          const ktime = document.createElementNS('http://www.w3.org/2000/svg','keyTimes');
+          anim2.setAttribute('path',d);
+          glow.appendChild(anim2);
+          svgEl.appendChild(glow);
+        }
+      });
+    }
+
+    // ── RENDER NODES ─────────────────────────────────────────────────────────
+    function renderNodes(){
+      while(nodesL.firstChild) nodesL.removeChild(nodesL.firstChild);
+      placed.forEach((pl,idx)=>{
+        const bt=BT[pl.bid];
+        const isSel=selNode===idx;
+        const el=document.createElement('div');
+        el.className='builder-node'+(isSel?' sel-node':'')+(isSynked?' synked-node':'');
+        el.style.cssText=`left:${pl.x}px;top:${pl.y}px;background:${isSynked?bt.color+'18':'rgba(12,26,18,.9)'};border-color:${isSynked?bt.color:isSel?bt.color:bt.color+'88'};`;
+        el.innerHTML=`<span class="ni">${bt.icon}</span><span class="nl">${bt.label}</span><button class="nr" data-i="${idx}">×</button>`;
+
+        el.addEventListener('mousedown',e=>{
+          if(e.target.classList.contains('nr')) return;
+          e.stopPropagation();
+          const r=board.getBoundingClientRect(), er=el.getBoundingClientRect();
+          dOff={x:e.clientX-er.left, y:e.clientY-er.top};
+          dragIdx=idx;
+        });
+
+        el.addEventListener('click',e=>{
+          if(e.target.classList.contains('nr')||dragIdx!==null) return;
+          if(selNode===null){ selNode=idx; toast.style.display='block'; }
+          else if(selNode===idx){ selNode=null; toast.style.display='none'; }
+          else {
+            const already=conns.find(([a,b])=>(a===selNode&&b===idx)||(a===idx&&b===selNode));
+            if(!already){ conns.push([selNode,idx]); }
+            selNode=null; toast.style.display='none';
+            markUnsyked(); drawSVG(); renderNodes(); return;
+          }
+          renderNodes();
+        });
+
+        el.querySelector('.nr').addEventListener('click',e=>{
+          e.stopPropagation();
+          const i=parseInt(e.target.dataset.i);
+          placed.splice(i,1);
+          conns=conns.filter(([a,b])=>a!==i&&b!==i).map(([a,b])=>[a>i?a-1:a,b>i?b-1:b]);
+          if(selNode===i) selNode=null;
+          else if(selNode!==null&&selNode>i) selNode--;
+          markUnsyked(); redraw();
+        });
+
+        nodesL.appendChild(el);
+      });
+      hint.style.display=placed.length===0?'flex':'none';
+      btnSynk.disabled=placed.length<2;
+    }
+
+    function redraw(){ drawSVG(); renderNodes(); }
+
+    function markUnsyked(){
+      isSynked=false; synkOk.style.display='none';
+      board.classList.remove('synked'); metricsCt.innerHTML='';
+    }
+
+    // ── DRAG ─────────────────────────────────────────────────────────────────
+    document.addEventListener('mousemove',e=>{
+      if(dragIdx===null) return;
+      const r=board.getBoundingClientRect();
+      placed[dragIdx].x=Math.max(0,Math.min(r.width-90,e.clientX-r.left-dOff.x));
+      placed[dragIdx].y=Math.max(0,Math.min(r.height-64,e.clientY-r.top-dOff.y));
+      redraw();
+    });
+    document.addEventListener('mouseup',()=>{ dragIdx=null; });
+
+    // ── DROP FROM PALETTE ────────────────────────────────────────────────────
+    document.querySelectorAll('.palette-item[draggable]').forEach(it=>{
+      it.addEventListener('dragstart',e=>e.dataTransfer.setData('bid',it.dataset.bid));
+    });
+    board.addEventListener('dragover',e=>{e.preventDefault();board.classList.add('drag-over');});
+    board.addEventListener('dragleave',()=>board.classList.remove('drag-over'));
+    board.addEventListener('drop',e=>{
+      e.preventDefault(); board.classList.remove('drag-over');
+      const bid=e.dataTransfer.getData('bid'); if(!bid) return;
+      const r=board.getBoundingClientRect();
+      placed.push({bid, x:Math.max(4,e.clientX-r.left-45), y:Math.max(4,e.clientY-r.top-32), id:nodeCount++});
+      markUnsyked(); redraw();
+    });
+
+    // ── SYNK — the wow moment ────────────────────────────────────────────────
+    btnSynk.addEventListener('click',()=>{
+      if(placed.length<2) return;
+      isSynked=true;
+      board.classList.add('synked');
+
+      // flash pulse overlay
+      pulse.classList.remove('active');
+      void pulse.offsetWidth;
+      pulse.classList.add('active');
+
+      synkOk.style.display='inline';
+      drawSVG(); renderNodes();
+
+      // count-up metrics
+      const totalCost=(placed.reduce((s,n)=>s+BT[n.bid].cost,0));
+      const rawLat=placed.reduce((s,n)=>s+BT[n.bid].lat,0);
+      const hasCache=placed.some(n=>n.bid==='cache');
+      const hasRag=placed.some(n=>n.bid==='rag');
+      const hasLLM=placed.some(n=>n.bid==='llm');
+      const effLat=hasCache?Math.round(rawLat*.62):rawLat;
+      const connRatio=conns.length/Math.max(placed.length-1,1);
+
+      const optims=[];
+      if(!hasCache&&placed.length>2) optims.push('Add a Cache layer to cut latency by ~38%');
+      if(!hasRag&&hasLLM) optims.push('Add a RAG System for context-aware, accurate responses');
+      if(connRatio<0.7) optims.push(`${placed.length-1-conns.length} node(s) unconnected — wire them for full orchestration`);
+      if(connRatio>=1&&hasCache&&hasRag) optims.push('Architecture looks clean — no critical gaps detected ✓');
+      if(optims.length===0) optims.push('All components connected and optimised ✓');
+
+      // render skeleton first
+      metricsCt.innerHTML=`
+        <div class="metrics-intro">⚡ Architecture metrics — animating…</div>
+        <div class="metrics-grid">
+          <div class="metric-card"><div class="metric-label">Cost / Request</div><div class="metric-val" id="m-cost">$0.000</div><div class="metric-sub">Simulated estimate</div></div>
+          <div class="metric-card"><div class="metric-label">Est. Latency</div><div class="metric-val" id="m-lat">0ms</div><div class="metric-sub">Optimised chain</div></div>
+          <div class="metric-card"><div class="metric-label">Components</div><div class="metric-val" id="m-nodes">0</div><div class="metric-sub" id="m-conns">0 connections</div></div>
+          <div class="metric-card optim"><div class="metric-label">Optimisations</div><div id="m-optims"></div><div class="metric-sub" style="margin-top:.3rem">Ideas — not guarantees</div></div>
+        </div>`;
+
+      // count up cost
+      animateVal(0, totalCost, 1200, v=>{
+        document.getElementById('m-cost').textContent='$'+v.toFixed(3);
+      });
+      // count up latency
+      animateVal(0, effLat, 1000, v=>{
+        document.getElementById('m-lat').textContent=Math.round(v)+'ms';
+      });
+      // count up nodes
+      animateVal(0, placed.length, 600, v=>{
+        document.getElementById('m-nodes').textContent=Math.round(v);
+      });
+      document.getElementById('m-conns').textContent=conns.length+' connection'+(conns.length!==1?'s':'');
+
+      // stagger optim items
+      const optEl=document.getElementById('m-optims');
+      optims.forEach((o,i)=>{
+        setTimeout(()=>{
+          const d=document.createElement('div');
+          d.className='optim-item';
+          d.style.animationDelay=i*0.1+'s';
+          d.textContent=o;
+          optEl.appendChild(d);
+        }, 800+i*220);
+      });
+    });
+
+    function animateVal(from,to,dur,cb){
+      const start=performance.now();
+      function tick(now){
+        const t=Math.min((now-start)/dur,1);
+        const ease=1-Math.pow(1-t,3);
+        cb(from+(to-from)*ease);
+        if(t<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // ── RESET ────────────────────────────────────────────────────────────────
+    btnReset.addEventListener('click',()=>{
+      placed=[]; conns=[]; selNode=null; nodeCount=0; dragIdx=null;
+      isSynked=false; synkOk.style.display='none';
+      toast.style.display='none'; board.classList.remove('synked','drag-over');
+      metricsCt.innerHTML='';
+      redraw();
+    });
+
+    redraw();
+  })();
+  </script>
+</body>
+</html>

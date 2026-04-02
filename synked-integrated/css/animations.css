@@ -1,0 +1,382 @@
+/* === ANIMATIONS.CSS === */
+
+/* ─── KEYFRAMES ─────────────────────────────────────────────────── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(0) scale(1);   opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-100vh) scale(0.3); opacity: 0; }
+}
+
+@keyframes morphBlob {
+  0%,100% { border-radius: 60% 40% 70% 30% / 50% 60% 40% 70%; transform: scale(1) rotate(0deg); }
+  33%     { border-radius: 40% 70% 30% 60% / 70% 30% 60% 40%; transform: scale(1.06) rotate(4deg); }
+  66%     { border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%; transform: scale(0.96) rotate(-3deg); }
+}
+
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes typingDot {
+  0%,100% { transform: translateY(0);   opacity: 0.4; }
+  50%     { transform: translateY(-4px); opacity: 1; }
+}
+
+@keyframes barFill {
+  from { width: 0 !important; }
+}
+
+@keyframes pulseRing {
+  0%   { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(2);   opacity: 0; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes successPop {
+  0%  { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.15); }
+  100%{ transform: scale(1);   opacity: 1; }
+}
+
+@keyframes indicatorPulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.4); }
+}
+
+/* ─── PAGE TRANSITION ────────────────────────────────────────────── */
+
+body { animation: fadeIn 0.3s ease; }
+
+/* ─── HERO ENTRANCE SEQUENCE ─────────────────────────────────────── */
+
+.hero-eyebrow {
+  opacity: 0;
+  /* filled by typing effect in JS */
+  animation: fadeIn 0.1s ease 0.9s forwards;
+}
+
+.hero-wordmark {
+  opacity: 0;
+  animation: fadeUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.45s forwards;
+}
+
+.hero-headline .line {
+  display: block;
+  opacity: 0;
+  transform: translateY(30px);
+}
+.hero-headline .line:nth-child(1) { animation: fadeUp 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.55s forwards; }
+.hero-headline .line:nth-child(2) { animation: fadeUp 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.70s forwards; }
+.hero-headline .line:nth-child(3) { animation: fadeUp 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.85s forwards; }
+
+.hero-sub {
+  opacity: 0;
+  animation: fadeUp 0.8s cubic-bezier(0.25,0.46,0.45,0.94) 1.05s forwards;
+}
+
+.hero-actions {
+  opacity: 0;
+  animation: fadeUp 0.8s cubic-bezier(0.25,0.46,0.45,0.94) 1.2s forwards;
+}
+
+/* ─── INDICATOR DOTS (replaced scroll hint) ─────────────────────── */
+
+.hero-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 5vw;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeIn 0.8s ease 1.6s forwards;
+}
+
+.indicator-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--deep-emerald);
+  opacity: 0.3;
+  animation: indicatorPulse 2s ease-in-out infinite;
+}
+.indicator-dot:nth-child(2) { animation-delay: 0.4s; }
+.indicator-dot:nth-child(3) { animation-delay: 0.8s; }
+
+/* ─── SCROLL REVEALS ─────────────────────────────────────────────── */
+
+[data-scroll-reveal] {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.75s cubic-bezier(0.25,0.46,0.45,0.94),
+              transform 0.75s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+
+[data-scroll-reveal].revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── PAGE HERO CONTENT ──────────────────────────────────────────── */
+
+.ph-content {
+  opacity: 0;
+  animation: fadeUp 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.3s forwards;
+}
+
+/* ─── NAV LINK UNDERLINE ANIMATION ──────────────────────────────── */
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0;
+  width: 0; height: 1px;
+  background: var(--deep-emerald);
+  transition: width 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.nav-links a:hover::after,
+.nav-links a.active::after { width: 100%; }
+
+/* ─── BUTTON HOVER SHIMMER ───────────────────────────────────────── */
+
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  transition: background 0.35s, color 0.35s, transform 0.35s cubic-bezier(0.23,1,0.32,1), box-shadow 0.35s;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.18) 50%, transparent 60%);
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.btn-primary:hover::after {
+  opacity: 1;
+  animation: shimmer 0.65s ease forwards;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(18,88,66,0.25);
+}
+
+/* ─── SERVICE CARD TRANSITIONS ───────────────────────────────────── */
+
+.service-card {
+  transition: transform 0.5s cubic-bezier(0.23,1,0.32,1),
+              box-shadow 0.5s cubic-bezier(0.23,1,0.32,1),
+              border-color 0.4s;
+  will-change: transform;
+}
+
+.service-card:hover {
+  transform: translateX(8px) translateZ(0);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--deep-emerald);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.service-card:hover::before { transform: scaleY(1); }
+
+/* ─── WHY ITEM HOVER ─────────────────────────────────────────────── */
+
+.why-item {
+  transition: background 0.45s cubic-bezier(0.25,0.46,0.45,0.94),
+              transform 0.45s cubic-bezier(0.23,1,0.32,1);
+}
+.why-item:hover { background: var(--deep-emerald); transform: translateY(-4px); }
+.why-item h4, .why-item p, .why-item .why-icon { transition: color 0.35s; }
+.why-item:hover h4, .why-item:hover p, .why-item:hover .why-icon { color: var(--white); }
+
+/* ─── INDUSTRY PILL TRANSITIONS ──────────────────────────────────── */
+
+.industry-pill {
+  transition: background 0.3s, color 0.3s, border-color 0.3s,
+              transform 0.3s cubic-bezier(0.23,1,0.32,1);
+}
+.industry-pill:hover { transform: translateY(-3px); }
+.industry-pill.active { animation: fadeIn 0.2s ease; }
+
+/* ─── OVERLAP CARD ENTRANCE ──────────────────────────────────────── */
+
+.overlap-card-inner {
+  transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), box-shadow 0.5s;
+}
+.overlap-card-inner:hover {
+  transform: translateY(-6px) rotate(-0.5deg);
+  box-shadow: 30px 30px 80px rgba(18,88,66,0.3);
+}
+
+/* ─── FOOTER LOGO FADE ───────────────────────────────────────────── */
+
+.footer-logo-img {
+  transition: opacity 0.3s, transform 0.3s;
+}
+.footer-logo-img:hover {
+  opacity: 0.7;
+  transform: scale(1.04);
+}
+
+/* ─── TILT CARDS BASE ────────────────────────────────────────────── */
+
+.team-card, .pricing-card {
+  transition: transform 0.5s cubic-bezier(0.23,1,0.32,1),
+              box-shadow 0.5s;
+}
+
+.team-card:hover {
+  box-shadow: 0 24px 60px rgba(0,0,0,0.1);
+}
+
+/* ─── TICKER ─────────────────────────────────────────────────────── */
+.ticker { animation: ticker 28s linear infinite; }
+.ticker-wrap:hover .ticker { animation-play-state: paused; }
+
+/* ─── METRIC BARS ────────────────────────────────────────────────── */
+.metric-fill { animation: barFill 1.6s cubic-bezier(0.25,0.46,0.45,0.94) 0.5s both; }
+
+/* ─── VALUE ITEMS ────────────────────────────────────────────────── */
+.value-item {
+  transition: background 0.4s cubic-bezier(0.25,0.46,0.45,0.94),
+              transform 0.4s cubic-bezier(0.23,1,0.32,1);
+}
+.value-item:hover { background: var(--deep-emerald); transform: translateY(-4px); }
+.value-item h3, .value-item p, .value-item .vi-num { transition: color 0.35s; }
+.value-item:hover h3, .value-item:hover p, .value-item:hover .vi-num { color: var(--white); }
+
+/* ─── ROADMAP LINE ANIMATION ─────────────────────────────────────── */
+.rt-item.revealed .rt-phase {
+  animation: slideInLeft 0.6s cubic-bezier(0.25,0.46,0.45,0.94) both;
+}
+.rt-item.revealed .rt-content {
+  animation: slideInRight 0.6s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s both;
+}
+
+/* ─── MOBILE MENU ANIMATION ──────────────────────────────────────── */
+.mobile-menu {
+  transition: opacity 0.4s cubic-bezier(0.25,0.46,0.45,0.94),
+              transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+  transform: translateY(-12px);
+}
+.mobile-menu.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.mobile-menu a {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: color 0.2s;
+}
+.mobile-menu.open a {
+  animation: fadeUp 0.5s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+}
+.mobile-menu.open a:nth-child(1) { animation-delay: 0.05s; }
+.mobile-menu.open a:nth-child(2) { animation-delay: 0.12s; }
+.mobile-menu.open a:nth-child(3) { animation-delay: 0.19s; }
+.mobile-menu.open a:nth-child(4) { animation-delay: 0.26s; }
+
+/* ─── SUCCESS STATE ──────────────────────────────────────────────── */
+.success-icon { animation: successPop 0.55s cubic-bezier(0.23,1,0.32,1) both; }
+
+/* ─── CONTACT FORM FOCUS GLOW ────────────────────────────────────── */
+.form-group input, .form-group select, .form-group textarea {
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  transform: translateY(-1px);
+}
+
+/* ─── SVC VISUAL CARDS ───────────────────────────────────────────── */
+.visual-card {
+  transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), box-shadow 0.5s;
+  animation: fadeUp 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.4s both;
+}
+.visual-card:hover {
+  transform: translateY(-8px) rotate(0.5deg);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.1);
+}
+
+/* ─── STACK ITEMS STAGGER ────────────────────────────────────────── */
+.stack-item {
+  animation: slideInLeft 0.5s cubic-bezier(0.25,0.46,0.45,0.94) both;
+}
+.stack-item:nth-child(1) { animation-delay: 0.6s; }
+.stack-item:nth-child(2) { animation-delay: 0.75s; }
+.stack-item:nth-child(3) { animation-delay: 0.9s; }
+.stack-item:nth-child(4) { animation-delay: 1.05s; }
+
+/* ─── FLOW NODES ─────────────────────────────────────────────────── */
+.fn {
+  transition: background 0.3s, color 0.3s, transform 0.3s;
+}
+.fn:hover { transform: translateY(-3px); }
+
+/* ─── PRICING CARD ───────────────────────────────────────────────── */
+.pricing-card {
+  transition: transform 0.45s cubic-bezier(0.23,1,0.32,1), box-shadow 0.45s;
+}
+.pricing-card:not(.featured):hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+.pricing-card.featured {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 50px rgba(18,88,66,0.25);
+}
+.pricing-card.featured:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 28px 70px rgba(18,88,66,0.3);
+}
+
+/* ─── TEAM CARD AVATAR HOVER ─────────────────────────────────────── */
+.avatar-placeholder {
+  transition: transform 0.4s cubic-bezier(0.23,1,0.32,1);
+}
+.team-card:hover .avatar-placeholder { transform: scale(1.08); }

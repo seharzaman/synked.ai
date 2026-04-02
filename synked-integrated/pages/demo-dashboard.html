@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agent Dashboard — Synked.ai</title>
+  <link rel="stylesheet" href="../css/global.css" />
+  <link rel="stylesheet" href="../css/services.css" />
+  <link rel="stylesheet" href="../css/animations.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --night:      #0C1A12;
+      --night-surf: #102018;
+      --night-bord: #1C3528;
+      --night-mid:  #3A6650;
+      --night-hi:   #A8D4BC;
+      --night-mono: #6BB89A;
+      --bone:       #EBDCC8;
+      --emerald:    #125842;
+      --pistachio:  #7F8C43;
+      --espresso:   #3F2A1C;
+    }
+    .disclaimer-banner {
+      background: linear-gradient(135deg,rgba(127,140,67,.1),rgba(18,88,66,.1));
+      border-bottom: 1px solid rgba(127,140,67,.22);
+      padding: .9rem 5vw; display:flex; align-items:flex-start; gap:.8rem;
+      margin-top: var(--nav-h);
+    }
+    .disc-text { font-size:.79rem; line-height:1.6; color:rgba(63,42,28,.62); }
+    .disc-text strong { color:var(--emerald); }
+
+    .demo-hero { background:var(--night); padding:4.5rem 5vw 3rem; position:relative; overflow:hidden; }
+    .demo-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 25% 60%,rgba(18,88,66,.2) 0%,transparent 55%); pointer-events:none; }
+    .demo-hero-inner { max-width:1100px; margin:0 auto; position:relative; z-index:1; }
+    .section-label { font-family:'Space Mono',monospace; font-size:.63rem; letter-spacing:.22em; text-transform:uppercase; color:var(--pistachio); display:block; margin-bottom:.9rem; }
+    .demo-hero h1 { font-family:'Cormorant Garamond',serif; font-size:clamp(2.6rem,5.5vw,4.5rem); font-weight:300; line-height:1.1; color:var(--bone); margin-bottom:1rem; }
+    .demo-hero h1 em { font-style:italic; color:var(--night-hi); }
+    .demo-hero p { font-size:.98rem; color:rgba(235,220,200,.5); max-width:520px; line-height:1.75; margin-bottom:1.5rem; }
+    .hero-chips { display:flex; flex-wrap:wrap; gap:.5rem; }
+    .hero-chip { background:rgba(235,220,200,.06); border:1px solid var(--night-bord); color:var(--night-mono); font-family:'Space Mono',monospace; font-size:.59rem; letter-spacing:.1em; text-transform:uppercase; padding:.33rem .75rem; border-radius:2px; }
+
+    .explainer-band { background:var(--espresso); padding:3rem 5vw; border-bottom:1px solid rgba(235,220,200,.05); }
+    .explainer-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; }
+    @media(max-width:860px){ .explainer-inner{grid-template-columns:1fr} }
+    .expl-card { background:rgba(235,220,200,.05); border:1px solid rgba(235,220,200,.08); border-radius:4px; padding:1.5rem; }
+    .expl-card .ec-ico { font-size:1.4rem; margin-bottom:.65rem; }
+    .expl-card h4 { font-family:'Cormorant Garamond',serif; font-size:1.15rem; color:var(--bone); margin-bottom:.45rem; }
+    .expl-card p { font-size:.83rem; color:rgba(235,220,200,.52); line-height:1.6; }
+
+    .dash-section { padding:4rem 5vw 5rem; background:var(--night); }
+    .dash-inner { max-width:1100px; margin:0 auto; }
+    .dash-header { margin-bottom:1.8rem; }
+    .dash-header h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.7rem,3vw,2.4rem); font-weight:300; color:var(--bone); line-height:1.2; margin-bottom:.35rem; }
+    .dash-header h2 em { font-style:italic; color:var(--night-hi); }
+    .dash-header p { font-size:.85rem; color:rgba(235,220,200,.38); max-width:480px; line-height:1.6; }
+
+    .summary-strip { display:flex; gap:.7rem; margin-bottom:1.4rem; flex-wrap:wrap; }
+    .sum-card { flex:1; min-width:100px; background:var(--night-surf); border:1px solid var(--night-bord); border-radius:4px; padding:.75rem .9rem; text-align:center; }
+    .sum-val { font-family:'Space Mono',monospace; font-size:1.25rem; font-weight:700; transition:color .5s; }
+    .sum-lbl { font-size:.6rem; color:var(--night-mono); text-transform:uppercase; letter-spacing:.1em; margin-top:.18rem; }
+
+    .live-ticker { display:flex; align-items:center; gap:.5rem; margin-bottom:1.3rem; }
+    .live-dot { width:6px; height:6px; border-radius:50%; background:var(--pistachio); animation:blink 1.4s ease-in-out infinite; }
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+    .live-txt { font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.1em; text-transform:uppercase; color:var(--night-mono); }
+    .live-time { font-family:'Space Mono',monospace; font-size:.6rem; color:var(--night-mid); margin-left:auto; }
+
+    .agent-header-row { display:grid; grid-template-columns:10px 1.5fr 80px 75px 60px 60px 70px 90px; gap:.8rem; padding:.35rem 1rem .35rem 1.1rem; margin-bottom:.25rem; }
+    .agent-header-row span { font-family:'Space Mono',monospace; font-size:.54rem; letter-spacing:.11em; text-transform:uppercase; color:var(--night-mono); text-align:right; }
+    .agent-header-row span:nth-child(2){ text-align:left; }
+
+    .agent-list { display:flex; flex-direction:column; gap:.3rem; }
+    .agent-row { background:var(--night-surf); border:1px solid var(--night-bord); border-radius:4px; display:grid; grid-template-columns:10px 1.5fr 80px 75px 60px 60px 70px 90px; align-items:center; gap:.8rem; padding:.78rem 1rem .78rem 1.1rem; cursor:pointer; transition:border-color .25s,background .2s; }
+    .agent-row:hover { border-color:var(--night-mid); }
+    .agent-row.open { border-radius:4px 4px 0 0; }
+    .agent-row.no-click { cursor:default; }
+    .a-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; transition:background .5s,box-shadow .5s; }
+    .a-name { font-family:'Space Mono',monospace; font-size:.67rem; color:var(--bone); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .a-col { text-align:right; }
+    .a-val { font-family:'Space Mono',monospace; font-size:.73rem; font-weight:600; transition:color .5s; }
+    .a-sub { font-size:.56rem; color:var(--night-mono); margin-top:.1rem; }
+    .a-tag { font-family:'Space Mono',monospace; font-size:.51rem; letter-spacing:.08em; text-transform:uppercase; padding:3px 7px; border-radius:2px; transition:background .5s,color .5s; white-space:nowrap; display:inline-block; }
+
+    .fix-panel { border:1px solid; border-top:none; border-radius:0 0 4px 4px; padding:1rem 1.2rem; animation:slideDown .22s ease; }
+    @keyframes slideDown{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+    .fix-issue { font-size:.82rem; color:rgba(235,220,200,.62); margin-bottom:.85rem; line-height:1.55; }
+    .fix-steps-list { list-style:none; display:flex; flex-direction:column; gap:.28rem; margin-bottom:.9rem; }
+    .fix-steps-list li { font-size:.79rem; color:rgba(235,220,200,.58); padding-left:1rem; position:relative; line-height:1.5; transition:color .4s; }
+    .fix-steps-list li::before { content:'→'; position:absolute; left:0; color:var(--pistachio); transition:content .3s; }
+    .fix-steps-list li.step-done { color:var(--night-hi); }
+    .fix-steps-list li.step-done::before { content:'✓'; }
+    .fix-steps-list li.step-active { color:var(--bone); }
+    .fix-steps-list li.step-active::before { content:'⟳'; animation:spin .8s linear infinite; display:inline-block; }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .fix-progress-wrap { background:var(--night-bord); border-radius:2px; height:3px; width:100%; margin:.65rem 0 .9rem; overflow:hidden; }
+    .fix-progress-bar { height:100%; background:linear-gradient(90deg,var(--emerald),var(--pistachio)); border-radius:2px; width:0%; transition:width .35s ease; }
+    .fix-actions { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .btn-fix { background:var(--emerald); color:white; border:none; padding:.48rem 1.15rem; font-size:.7rem; font-family:'Space Mono',monospace; letter-spacing:.09em; text-transform:uppercase; border-radius:2px; cursor:pointer; transition:background .2s; }
+    .btn-fix:hover:not(:disabled){ background:#1a7a5e; }
+    .btn-fix:disabled{ opacity:.45; cursor:not-allowed; }
+    .fix-status-msg { font-family:'Space Mono',monospace; font-size:.66rem; color:var(--night-hi); }
+    .fix-recovered-banner { background:rgba(76,175,80,.1); border:1px solid rgba(76,175,80,.3); border-radius:3px; padding:.6rem 1rem; font-family:'Space Mono',monospace; font-size:.68rem; color:#4CAF50; letter-spacing:.06em; margin-top:.4rem; animation:fadeIn .5s ease; }
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+    .behind-section { padding:4rem 5vw; background:var(--espresso); border-top:1px solid rgba(235,220,200,.05); }
+    .behind-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; }
+    @media(max-width:860px){ .behind-inner{grid-template-columns:1fr;gap:2rem} }
+    .behind-left h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,3.5vw,2.8rem); font-weight:300; color:var(--bone); line-height:1.2; margin-bottom:.85rem; }
+    .behind-left h2 em { font-style:italic; color:#E08080; }
+    .behind-left p { font-size:.88rem; color:rgba(235,220,200,.52); line-height:1.75; margin-bottom:.85rem; }
+    .check-list { list-style:none; display:flex; flex-direction:column; gap:.6rem; margin-top:1.1rem; }
+    .check-list li { font-size:.86rem; color:rgba(235,220,200,.7); padding-left:1.2rem; position:relative; line-height:1.5; }
+    .check-list li::before { content:'✓'; position:absolute; left:0; color:var(--pistachio); font-size:.74rem; }
+    .behind-right { display:flex; flex-direction:column; gap:.9rem; }
+    .q-card { background:rgba(235,220,200,.05); border:1px solid rgba(235,220,200,.07); border-left:3px solid var(--pistachio); border-radius:0 4px 4px 0; padding:1.2rem 1.4rem; }
+    .q-card p { font-family:'Cormorant Garamond',serif; font-size:1.08rem; font-style:italic; color:var(--bone); line-height:1.6; }
+    .q-source { font-family:'Space Mono',monospace; font-size:.57rem; letter-spacing:.1em; text-transform:uppercase; color:var(--night-mono); margin-top:.65rem; }
+
+    .demo-cta { padding:4rem 5vw; background:var(--night); border-top:1px solid var(--night-bord); text-align:center; }
+    .demo-cta h2 { font-family:'Cormorant Garamond',serif; font-size:clamp(1.7rem,4vw,2.6rem); font-weight:300; color:var(--bone); margin-bottom:.65rem; }
+    .demo-cta p { font-size:.9rem; color:rgba(235,220,200,.42); margin-bottom:1.7rem; }
+    .btn-primary { background:var(--emerald); color:white; padding:.78rem 1.9rem; border-radius:2px; font-size:.82rem; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; font-weight:500; transition:all .2s; display:inline-block; border:2px solid var(--emerald); cursor:pointer; font-family:'DM Sans',sans-serif; }
+    .btn-primary:hover{ background:transparent; color:var(--emerald); }
+
+    @media(max-width:768px){
+      .agent-header-row,.agent-row{ grid-template-columns:10px 1fr 65px 60px 70px; }
+      .agent-header-row>*:nth-child(n+5),.agent-row>*:nth-child(n+5){ display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <a href="../index.html" class="nav-logo">
+      <img src="../assets/logo.png" alt="Synked.ai" class="nav-logo-img" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="demo-builder.html">System Builder</a></li>
+      <li><a href="demo-dashboard.html" class="active">Dashboard</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="contact.html" class="nav-cta">Get Started</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="services.html">Services</a>
+    <a href="demo-builder.html">System Builder</a>
+    <a href="demo-dashboard.html">Dashboard</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <div class="disclaimer-banner">
+    <span>🧩</span>
+    <div class="disc-text">
+      <strong>Concept demo — not real data.</strong>
+      This dashboard illustrates how we monitor and fix your AI agents in production.
+      All agents, metrics and fix steps shown are simulated examples. Real outputs and pricing are scoped per client.
+    </div>
+  </div>
+
+  <section class="demo-hero">
+    <div class="demo-hero-inner">
+      <span class="section-label">Health Monitor</span>
+      <h1>Agent Health<br/><em>Dashboard</em></h1>
+      <p>Real-time visibility across every agent. Click a degraded or failing agent, hit Apply Fixes, and watch the metrics recover — step by step.</p>
+      <div class="hero-chips">
+        <span class="hero-chip">🟢 Live Status</span>
+        <span class="hero-chip">⚡ Step-by-Step Recovery</span>
+        <span class="hero-chip">📊 Live Metric Updates</span>
+        <span class="hero-chip">🔔 Incident Resolution</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="explainer-band">
+    <div class="explainer-inner">
+      <div class="expl-card">
+        <div class="ec-ico">👁️</div>
+        <h4>What you're seeing</h4>
+        <p>A live control panel for your deployed AI agents. Each row shows real-time health, latency, error rate and uptime — exactly how we monitor your systems.</p>
+      </div>
+      <div class="expl-card">
+        <div class="ec-ico">🔧</div>
+        <h4>Click to fix — for real</h4>
+        <p>Click any Degraded or Failing agent. Hit Apply Fixes and watch: each step runs, the progress bar fills, and the metrics on that row visibly recover. Green means fixed.</p>
+      </div>
+      <div class="expl-card">
+        <div class="ec-ico">💼</div>
+        <h4>What this means for you</h4>
+        <p>You won't touch any of this. We watch it 24/7, catch issues before they hit your users, and push fixes — all within our managed service. You get a report.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dash-section">
+    <div class="dash-inner">
+      <div class="dash-header">
+        <span class="section-label">Live Demo — Simulated Data</span>
+        <h2>Agent Health <em>Dashboard</em></h2>
+        <p>Click any Degraded or Failing row → apply fixes → watch real-time recovery.</p>
+      </div>
+      <div class="live-ticker">
+        <div class="live-dot"></div>
+        <span class="live-txt">Monitoring active</span>
+        <span class="live-time" id="live-clock"></span>
+      </div>
+      <div class="summary-strip" id="summary-strip"></div>
+      <div class="agent-header-row">
+        <span></span><span style="text-align:left">Agent</span>
+        <span>Latency</span><span>Success</span><span>Errors</span>
+        <span>Req/min</span><span>Uptime</span><span>Status</span>
+      </div>
+      <div class="agent-list" id="agent-list"></div>
+    </div>
+  </section>
+
+  <section class="behind-section">
+    <div class="behind-inner">
+      <div class="behind-left">
+        <span class="section-label">Behind the Demo</span>
+        <h2>We monitor.<br/>We fix.<br/><em>You focus.</em></h2>
+        <p>The dashboard above reflects how we manage AI in production for real clients. Every metric is something we track around the clock — latency spikes, error surges, uptime drops.</p>
+        <p>When an agent degrades we see it first. When it fails we fix it. You receive a report — not a panic call at 2am.</p>
+        <ul class="check-list">
+          <li>24/7 uptime monitoring across all deployed agents</li>
+          <li>Automated alerts with root-cause analysis</li>
+          <li>Fix recommendations pushed within minutes</li>
+          <li>Monthly performance reports with optimisation notes</li>
+          <li>Proactive prompt tuning before issues become incidents</li>
+        </ul>
+      </div>
+      <div class="behind-right">
+        <div class="q-card">
+          <p>"I don't need to worry if my AI breaks — they handle it."</p>
+          <div class="q-source">— What clients tell us after onboarding</div>
+        </div>
+        <div class="q-card" style="border-left-color:#E08080;">
+          <p>"All numbers, agents and metrics shown here are illustrative. Your real dashboard reflects your actual systems, agents and usage patterns."</p>
+          <div class="q-source">— A note from us</div>
+        </div>
+        <div class="q-card" style="border-left-color:var(--night-hi);">
+          <p>"Think of this as a window into what ongoing management looks like — not a quote or guarantee."</p>
+          <div class="q-source">— What this demo is</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo-cta">
+    <h2>Want a dashboard like this for your AI?</h2>
+    <p>Tell us what you're building — we'll keep it running.</p>
+    <a href="contact.html" class="btn-primary">Start the Conversation</a>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-name">Synked.ai</div>
+        <p>Sync Your Business with AI.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h5>Company</h5>
+          <a href="about.html">About</a>
+          <a href="services.html">Services</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h5>Demos</h5>
+          <a href="demo-builder.html">System Builder</a>
+          <a href="demo-dashboard.html">Agent Dashboard</a>
+        </div>
+        <div class="footer-col">
+          <h5>Services</h5>
+          <a href="services.html#agents">AI Agents</a>
+          <a href="services.html#rag">RAG Systems</a>
+          <a href="services.html#workflow">Workflow Automation</a>
+          <a href="services.html#management">AI Management</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Synked.ai — All rights reserved.</p>
+      <p>hello@synked.ai</p>
+    </div>
+  </footer>
+
+  <script src="../js/animations.js"></script>
+  <script>
+  // ── CLOCK ────────────────────────────────────────────────────────────────────
+  (function(){
+    function tick(){ document.getElementById('live-clock').textContent = new Date().toLocaleTimeString('en-US',{hour12:false}); }
+    tick(); setInterval(tick,1000);
+  })();
+
+  // ── DATA ─────────────────────────────────────────────────────────────────────
+  const AGENTS = [
+    { id:'support',  name:'Support Agent (WhatsApp)',  status:'ok',    lat:320,  succ:99.1, err:2,   rpm:142, upt:99.9, issue:null, fixes:[] },
+    { id:'sales',    name:'Sales Qualifier Bot',        status:'warn',  lat:1840, succ:91.4, err:38,  rpm:38,  upt:97.2,
+      issue:'LLM provider latency spiked — response times 4× above baseline in last 2h.',
+      fixes:['Switch to fallback LLM endpoint (GPT-4o-mini)','Reduce max_tokens 800→400 for qualification flow','Enable response caching for repeated queries'],
+      fixed:{lat:410, succ:98.7, err:3, upt:99.3, status:'ok'} },
+    { id:'pipeline', name:'Data Pipeline (Nightly)',    status:'ok',    lat:210,  succ:100,  err:0,   rpm:4,   upt:100,  issue:null, fixes:[] },
+    { id:'rag',      name:'RAG Knowledge Engine',       status:'warn',  lat:980,  succ:94.7, err:21,  rpm:67,  upt:98.1,
+      issue:'Vector search returning stale embeddings — index rebuild overdue.',
+      fixes:['Trigger incremental index rebuild on Pinecone namespace','Increase similarity threshold 0.72→0.80','Re-embed documents updated in last 48h'],
+      fixed:{lat:290, succ:99.4, err:1, upt:99.7, status:'ok'} },
+    { id:'email',    name:'Email Responder Agent',      status:'error', lat:null, succ:41.2, err:187, rpm:19,  upt:61.4,
+      issue:'OAuth token for Gmail integration expired — agent failing on every send.',
+      fixes:['Rotate OAuth token via Google Workspace admin','Update secret GMAIL_OAUTH_TOKEN in env config','Re-run integration health check after token refresh'],
+      fixed:{lat:520, succ:98.1, err:4, upt:99.2, status:'ok'} },
+    { id:'ops',      name:'Internal Ops Assistant',     status:'ok',    lat:445,  succ:98.6, err:5,   rpm:22,  upt:99.5, issue:null, fixes:[] },
+    { id:'enrich',   name:'Lead Enrichment Worker',     status:'warn',  lat:2100, succ:88.0, err:44,  rpm:11,  upt:95.3,
+      issue:'Third-party enrichment API (Clearbit) hitting rate-limit threshold.',
+      fixes:['Implement exponential backoff on enrichment requests','Cache enriched leads 72h to reduce API calls','Switch to Apollo.io fallback endpoint'],
+      fixed:{lat:480, succ:97.8, err:6, upt:98.9, status:'ok'} },
+  ];
+
+  // mutable live state
+  const S = {};
+  AGENTS.forEach(a => { S[a.id] = { lat:a.lat, succ:a.succ, err:a.err, rpm:a.rpm, upt:a.upt, status:a.status, fixing:false, fixed:false, step:-1 }; });
+
+  let openId = null;
+
+  // ── COLOUR HELPERS ────────────────────────────────────────────────────────────
+  const sCol = s => s==='ok'?'#4CAF50':s==='warn'?'#FFC107':'#F44336';
+  const sLbl = s => s==='ok'?'Healthy':s==='warn'?'Degraded':'Failing';
+  const lCol = v => v===null?'#F44336':v<600?'#4CAF50':v<1300?'#FFC107':'#F44336';
+  const scCol= v => v>=97?'#4CAF50':v>=88?'#FFC107':'#F44336';
+  const uCol = v => v>=99?'#4CAF50':v>=95?'#FFC107':'#F44336';
+  const eCol = v => v>30?'#F44336':v>8?'#FFC107':'#4CAF50';
+
+  // ── SUMMARY ───────────────────────────────────────────────────────────────────
+  function renderSummary(){
+    const vals = Object.values(S);
+    const ok=vals.filter(v=>v.status==='ok').length, warn=vals.filter(v=>v.status==='warn').length, err=vals.filter(v=>v.status==='error').length;
+    const avgUp=(vals.reduce((s,v)=>s+v.upt,0)/vals.length).toFixed(1);
+    document.getElementById('summary-strip').innerHTML=`
+      <div class="sum-card"><div class="sum-val" id="s-ok" style="color:#4CAF50">${ok}</div><div class="sum-lbl">Healthy</div></div>
+      <div class="sum-card"><div class="sum-val" id="s-warn" style="color:#FFC107">${warn}</div><div class="sum-lbl">Degraded</div></div>
+      <div class="sum-card"><div class="sum-val" id="s-err" style="color:#F44336">${err}</div><div class="sum-lbl">Failing</div></div>
+      <div class="sum-card"><div class="sum-val" style="color:var(--night-hi)">${AGENTS.length}</div><div class="sum-lbl">Total</div></div>
+      <div class="sum-card"><div class="sum-val" id="s-upt" style="color:var(--pistachio)">${avgUp}%</div><div class="sum-lbl">Avg Uptime</div></div>`;
+  }
+  function patchSummary(){
+    const vals=Object.values(S);
+    const ok=vals.filter(v=>v.status==='ok').length,warn=vals.filter(v=>v.status==='warn').length,err=vals.filter(v=>v.status==='error').length;
+    const avgUp=(vals.reduce((s,v)=>s+v.upt,0)/vals.length).toFixed(1);
+    ['s-ok','s-warn','s-err','s-upt'].forEach((id,i)=>{
+      const el=document.getElementById(id); if(el) el.textContent=[ok,warn,err,avgUp+'%'][i];
+    });
+  }
+
+  // ── RENDER AGENTS ─────────────────────────────────────────────────────────────
+  function renderAgents(){
+    const list=document.getElementById('agent-list');
+    list.innerHTML='';
+    AGENTS.forEach(agent=>{
+      const st=S[agent.id], col=sCol(st.status), isOpen=openId===agent.id, canClick=agent.fixes.length>0;
+      const row=document.createElement('div');
+      row.className='agent-row'+(isOpen?' open':'')+(canClick?'':' no-click');
+      row.style.borderColor=isOpen?col:'';
+      row.innerHTML=`
+        <div class="a-dot" style="background:${col};box-shadow:0 0 7px ${col}55"></div>
+        <div class="a-name">${agent.name}</div>
+        <div class="a-col"><div class="a-val" style="color:${lCol(st.lat)}">${st.lat===null?'—':st.lat+'ms'}</div><div class="a-sub">latency</div></div>
+        <div class="a-col"><div class="a-val" style="color:${scCol(st.succ)}">${st.succ}%</div><div class="a-sub">success</div></div>
+        <div class="a-col"><div class="a-val" style="color:${eCol(st.err)}">${st.err}</div><div class="a-sub">errors</div></div>
+        <div class="a-col"><div class="a-val" style="color:var(--bone)">${st.rpm}</div><div class="a-sub">req/min</div></div>
+        <div class="a-col"><div class="a-val" style="color:${uCol(st.upt)}">${st.upt}%</div><div class="a-sub">uptime</div></div>
+        <div class="a-col"><span class="a-tag" style="background:${col}20;color:${col}">${sLbl(st.status)}</span></div>`;
+      if(canClick){ row.addEventListener('click',()=>{ openId=openId===agent.id?null:agent.id; renderAgents(); }); }
+      list.appendChild(row);
+
+      if(isOpen && canClick){
+        const panel=document.createElement('div');
+        panel.className='fix-panel';
+        panel.style.cssText=`border-color:${col};background:${col}09;`;
+
+        const stepsHtml=agent.fixes.map((f,i)=>{
+          let cls='';
+          if(st.fixed) cls='step-done';
+          else if(st.fixing && i<st.step) cls='step-done';
+          else if(st.fixing && i===st.step) cls='step-active';
+          return `<li class="${cls}">${f}</li>`;
+        }).join('');
+
+        let actHtml='';
+        if(st.fixed){
+          actHtml=`<div class="fix-recovered-banner">✦ All fixes applied — agent recovered successfully</div>`;
+        } else if(st.fixing){
+          actHtml=`<button class="btn-fix" disabled>⟳ Applying fixes…</button><span class="fix-status-msg" id="fix-msg-${agent.id}">Running step ${st.step+1} of ${agent.fixes.length}…</span>`;
+        } else {
+          actHtml=`<button class="btn-fix" id="btn-apply-${agent.id}">⚡ Apply All Fixes</button>`;
+        }
+
+        panel.innerHTML=`
+          <p class="fix-issue">⚠ ${agent.issue}</p>
+          <ul class="fix-steps-list" id="steps-${agent.id}">${stepsHtml}</ul>
+          <div class="fix-progress-wrap" id="prog-wrap-${agent.id}" style="display:${st.fixing||st.fixed?'block':'none'}">
+            <div class="fix-progress-bar" id="prog-bar-${agent.id}" style="width:${st.fixed?100:st.fixing?Math.round((st.step/agent.fixes.length)*100):0}%"></div>
+          </div>
+          <div class="fix-actions" id="fix-act-${agent.id}">${actHtml}</div>`;
+
+        list.appendChild(panel);
+
+        const btn=document.getElementById(`btn-apply-${agent.id}`);
+        if(btn) btn.addEventListener('click',e=>{ e.stopPropagation(); startFix(agent.id); });
+      }
+    });
+  }
+
+  // ── FIX ENGINE — step-by-step, metrics animate ────────────────────────────────
+  function startFix(id){
+    const agent=AGENTS.find(a=>a.id===id), st=S[id];
+    if(!agent||st.fixing||st.fixed) return;
+    st.fixing=true; st.step=0;
+    renderAgents();
+    // show progress bar immediately
+    const pw=document.getElementById(`prog-wrap-${id}`); if(pw) pw.style.display='block';
+    runStep(id,0);
+  }
+
+  function runStep(id, step){
+    const agent=AGENTS.find(a=>a.id===id), st=S[id];
+    const total=agent.fixes.length;
+    st.step=step;
+
+    // partially interpolate metrics toward fixed values
+    if(agent.fixed){
+      const p=(step)/total;
+      if(agent.lat!==null) st.lat=Math.round(agent.lat+(agent.fixed.lat-agent.lat)*p);
+      st.succ=parseFloat((agent.succ+(agent.fixed.succ-agent.succ)*p).toFixed(1));
+      st.err=Math.round(agent.err+(agent.fixed.err-agent.err)*p);
+      st.upt=parseFloat((agent.upt+(agent.fixed.upt-agent.upt)*p).toFixed(1));
+    }
+
+    // update progress bar + message without full re-render
+    const pb=document.getElementById(`prog-bar-${id}`);
+    if(pb) pb.style.width=Math.round((step/total)*100)+'%';
+    const msg=document.getElementById(`fix-msg-${id}`);
+    if(msg) msg.textContent=`Running step ${step+1} of ${total}…`;
+
+    // update step classes
+    const stepsEl=document.getElementById(`steps-${id}`);
+    if(stepsEl){ [...stepsEl.children].forEach((li,i)=>{
+      li.className=i<step?'step-done':i===step?'step-active':'';
+    }); }
+
+    patchSummary();
+    // patch this agent's row values without full re-render
+    patchAgentRow(id);
+
+    if(step+1<total){ setTimeout(()=>runStep(id,step+1),1300); }
+    else { setTimeout(()=>finishFix(id),1000); }
+  }
+
+  function finishFix(id){
+    const agent=AGENTS.find(a=>a.id===id), st=S[id];
+    if(agent.fixed){
+      st.lat=agent.fixed.lat; st.succ=agent.fixed.succ;
+      st.err=agent.fixed.err; st.upt=agent.fixed.upt; st.status=agent.fixed.status;
+    }
+    st.fixing=false; st.fixed=true; st.step=agent.fixes.length;
+    patchSummary();
+    renderAgents(); // full re-render to show recovery banner + green status
+  }
+
+  function patchAgentRow(id){
+    // update just the numeric cells on the row without destroying the open panel
+    const st=S[id];
+    const rows=document.querySelectorAll('.agent-row');
+    rows.forEach(row=>{
+      const nameEl=row.querySelector('.a-name');
+      if(!nameEl) return;
+      const agent=AGENTS.find(a=>a.name===nameEl.textContent);
+      if(!agent||agent.id!==id) return;
+      const vals=row.querySelectorAll('.a-val');
+      if(vals[0]){ vals[0].textContent=st.lat===null?'—':st.lat+'ms'; vals[0].style.color=lCol(st.lat); }
+      if(vals[1]){ vals[1].textContent=st.succ+'%'; vals[1].style.color=scCol(st.succ); }
+      if(vals[2]){ vals[2].textContent=st.err; vals[2].style.color=eCol(st.err); }
+      if(vals[4]){ vals[4].textContent=st.upt+'%'; vals[4].style.color=uCol(st.upt); }
+      const dot=row.querySelector('.a-dot'); const col=sCol(st.status);
+      if(dot){ dot.style.background=col; dot.style.boxShadow=`0 0 7px ${col}55`; }
+      const tag=row.querySelector('.a-tag');
+      if(tag){ tag.textContent=sLbl(st.status); tag.style.background=col+'20'; tag.style.color=col; }
+    });
+  }
+
+  // ── LIVE JITTER for healthy agents ───────────────────────────────────────────
+  setInterval(()=>{
+    AGENTS.forEach(a=>{ const st=S[a.id];
+      if(st.status==='ok'&&!st.fixing){
+        st.lat=a.lat+Math.round((Math.random()-.5)*28);
+        st.succ=parseFloat((a.succ+(Math.random()-.5)*.35).toFixed(1));
+        st.rpm=a.rpm+Math.round((Math.random()-.5)*4);
+      }
+    });
+    if(!openId) renderAgents(); else patchSummary();
+  },3200);
+
+  renderSummary();
+  renderAgents();
+  </script>
+</body>
+</html>
