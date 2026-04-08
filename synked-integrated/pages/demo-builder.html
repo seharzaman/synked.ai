@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="../assets/favicon.png" />
+  <link rel="shortcut icon" href="../assets/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>System Builder — Synked.ai</title>
   <link rel="stylesheet" href="../css/global.css" />
@@ -185,11 +187,11 @@
     <div class="demo-hero-inner">
       <span class="section-label">System Builder</span>
       <h1>Build Your Agent<br/>System <em>Live</em></h1>
-      <p>Drag components onto the canvas, connect them, then hit ⚡ Synk — and watch your architecture come alive with animated data flow, live metrics, and optimisation insights.</p>
+      <p>Drag components onto the canvas, connect them, then hit → Synk — and watch your architecture come alive with animated data flow, live metrics, and optimisation insights.</p>
       <div class="hero-chips">
-        <span class="hero-chip">🧠 LLM Orchestration</span>
-        <span class="hero-chip">🔗 Live Connections</span>
-        <span class="hero-chip">⚡ Animated Data Flow</span>
+        <span class="hero-chip">◎ LLM Orchestration</span>
+        <span class="hero-chip">⟳ Live Connections</span>
+        <span class="hero-chip">→ Animated Data Flow</span>
         <span class="hero-chip">📊 Live Cost & Latency</span>
       </div>
     </div>
@@ -203,7 +205,7 @@
         <p>Drop AI components onto the canvas — LLM core, RAG system, API layers, caches. Click two nodes to wire them together and form your architecture.</p>
       </div>
       <div class="expl-card">
-        <div class="ec-ico">⚡</div>
+        <div class="ec-ico" style="font-family:'Space Mono',monospace;font-size:.8rem;letter-spacing:.05em">AUTO</div>
         <h4>Hit Synk — watch it live</h4>
         <p>Click Synk System and watch: animated data pulses travel your connections, nodes glow, and live cost & latency metrics count up in real time. The canvas becomes your system.</p>
       </div>
@@ -220,19 +222,19 @@
       <div class="builder-header">
         <span class="section-label">Interactive Demo — Simulated Outputs</span>
         <h2>Build Your Agent System <em>Live</em></h2>
-        <p>Drag components from the panel → click two nodes to connect them → hit ⚡ Synk to see your architecture animated with live data flow and metrics.</p>
+        <p>Drag components from the panel → click two nodes to connect them → hit → Synk to see your architecture animated with live data flow and metrics.</p>
       </div>
 
       <div class="builder-layout">
         <div class="palette-panel">
           <div class="palette-heading">Components</div>
-          <div class="palette-item" draggable="true" data-bid="llm" style="--ac:#125842"><div class="palette-item-name">🧠 LLM Core</div><div class="palette-item-desc">Language model node</div></div>
+          <div class="palette-item" draggable="true" data-bid="llm" style="--ac:#125842"><div class="palette-item-name">◎ LLM Core</div><div class="palette-item-desc">Language model node</div></div>
           <div class="palette-item" draggable="true" data-bid="rag" style="--ac:#7F8C43"><div class="palette-item-name">📚 RAG System</div><div class="palette-item-desc">Knowledge retrieval</div></div>
           <div class="palette-item" draggable="true" data-bid="api" style="--ac:#B089AA"><div class="palette-item-name">🔌 API Layer</div><div class="palette-item-desc">External integrations</div></div>
-          <div class="palette-item" draggable="true" data-bid="cache" style="--ac:#6B8FA8"><div class="palette-item-name">⚡ Cache</div><div class="palette-item-desc">Fast response store</div></div>
+          <div class="palette-item" draggable="true" data-bid="cache" style="--ac:#6B8FA8"><div class="palette-item-name">→ Cache</div><div class="palette-item-desc">Fast response store</div></div>
           <div class="palette-item" draggable="true" data-bid="queue" style="--ac:#A86B3A"><div class="palette-item-name">📬 Queue</div><div class="palette-item-desc">Async job handling</div></div>
           <div class="palette-item" draggable="true" data-bid="embed" style="--ac:#3A6B8F"><div class="palette-item-name">🔢 Embeddings</div><div class="palette-item-desc">Vector search</div></div>
-          <div class="palette-hint">↳ Drag to canvas<br/>↳ Click nodes to connect<br/>↳ Hit ⚡ Synk to animate</div>
+          <div class="palette-hint">↳ Drag to canvas<br/>↳ Click nodes to connect<br/>↳ Hit → Synk to animate</div>
         </div>
 
         <div class="canvas-panel">
@@ -244,7 +246,7 @@
             <div class="connect-toast" id="connect-toast" style="display:none">Click another node to connect ↗</div>
           </div>
           <div class="builder-actions">
-            <button class="btn-synk" id="btn-synk" disabled>⚡ Synk System</button>
+            <button class="btn-synk" id="btn-synk" disabled>→ Synk System</button>
             <button class="btn-sm-ghost" id="btn-reset">Reset</button>
             <span class="synk-ok" id="synk-ok" style="display:none">✦ System synked</span>
           </div>
@@ -292,7 +294,7 @@
     <a href="contact.html" class="btn-primary">Start the Conversation</a>
   </section>
 
-  <footer class="footer">
+    <footer class="footer">
     <div class="footer-top">
       <div class="footer-brand">
         <div class="footer-brand-name">Synked.ai</div>
@@ -320,7 +322,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2025 Synked.ai — All rights reserved.</p>
+      <p>© 2026 Synked.ai — All rights reserved.</p>
       <p>hello@synked.ai</p>
     </div>
   </footer>
@@ -517,7 +519,7 @@
 
       // render skeleton first
       metricsCt.innerHTML=`
-        <div class="metrics-intro">⚡ Architecture metrics — animating…</div>
+        <div class="metrics-intro">→ Architecture metrics — animating…</div>
         <div class="metrics-grid">
           <div class="metric-card"><div class="metric-label">Cost / Request</div><div class="metric-val" id="m-cost">$0.000</div><div class="metric-sub">Simulated estimate</div></div>
           <div class="metric-card"><div class="metric-label">Est. Latency</div><div class="metric-val" id="m-lat">0ms</div><div class="metric-sub">Optimised chain</div></div>
