@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../css/services.css" />
   <link rel="stylesheet" href="../css/animations.css" />
   <link rel="stylesheet" href="../css/contact.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -60,47 +61,47 @@
       <h2>We'd love to<br/>hear from you.</h2>
       <div class="contact-info">
         <div class="ci-item">
-          <span class="ci-label">Email</span>
+          <span class="ci-label"><i data-lucide="mail" style="width:13px;height:13px;vertical-align:middle;margin-right:4px"></i>Email</span>
           <a href="mailto:hello@synked.ai" class="ci-value">hello@synked.ai</a>
         </div>
         <div class="ci-item">
-          <span class="ci-label">Response Time</span>
+          <span class="ci-label"><i data-lucide="clock" style="width:13px;height:13px;vertical-align:middle;margin-right:4px"></i>Response Time</span>
           <span class="ci-value">Within 24 hours</span>
         </div>
         <div class="ci-item">
-          <span class="ci-label">What Happens Next</span>
-          <p class="ci-value small">We review your message, schedule a discovery call, and outline a custom AI system for your business — no commitment required.</p>
+          <span class="ci-label"><i data-lucide="arrow-right-circle" style="width:13px;height:13px;vertical-align:middle;margin-right:4px"></i>What Happens Next</span>
+          <p class="ci-value small">We review your message, schedule a discovery call, and outline a custom AI system for your business; no commitment required.</p>
         </div>
       </div>
       <div class="contact-process">
         <span class="section-label">Our Process</span>
         <div class="process-steps">
           <div class="ps-item">
-            <span class="ps-num">01</span>
+            <span class="ps-num"><i data-lucide="phone-call" style="width:16px;height:16px"></i></span>
             <div>
               <h5>Discovery Call</h5>
               <p>We understand your business, pain points, and AI goals.</p>
             </div>
           </div>
           <div class="ps-item">
-            <span class="ps-num">02</span>
+            <span class="ps-num"><i data-lucide="layout" style="width:16px;height:16px"></i></span>
             <div>
               <h5>System Design</h5>
               <p>We architect a custom AI solution tailored to your workflows.</p>
             </div>
           </div>
           <div class="ps-item">
-            <span class="ps-num">03</span>
+            <span class="ps-num"><i data-lucide="rocket" style="width:16px;height:16px"></i></span>
             <div>
               <h5>Build & Deploy</h5>
               <p>We build, test, and deploy your AI system into your existing stack.</p>
             </div>
           </div>
           <div class="ps-item">
-            <span class="ps-num">04</span>
+            <span class="ps-num"><i data-lucide="activity" style="width:16px;height:16px"></i></span>
             <div>
               <h5>Ongoing Management</h5>
-              <p>We monitor, optimize, and scale — month after month.</p>
+              <p>We monitor, optimize, and scale, month after month.</p>
             </div>
           </div>
         </div>
@@ -166,12 +167,12 @@
           </div>
           <button type="submit" class="btn-submit" id="submitBtn">
             <span class="btn-text">Send Message</span>
-            <span class="btn-arrow">→</span>
+            <span class="btn-arrow"><i data-lucide="arrow-right" style="width:15px;height:15px;vertical-align:middle"></i></span>
           </button>
         </form>
 
         <div class="form-success" id="formSuccess" style="display:none;">
-          <div class="success-icon">✓</div>
+          <div class="success-icon"><i data-lucide="check-circle" style="width:40px;height:40px;color:var(--deep-emerald)"></i></div>
           <h3>Message received.</h3>
           <p>Thank you for reaching out. Our team will review your message and get back to you within 24 hours.</p>
         </div>
@@ -214,6 +215,7 @@
 
   <script src="../js/animations.js"></script>
   <script>
+    if(window.lucide) lucide.createIcons();
     async function handleSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
@@ -241,7 +243,7 @@
           form.style.display = 'none';
           document.getElementById('formSuccess').style.display = 'flex';
         } else {
-          btn.innerHTML = '<span class="btn-text">Send Message</span><span class="btn-arrow">→</span>';
+          btn.innerHTML = '<span class="btn-text">Send Message</span><span class="btn-arrow"><i data-lucide="arrow-right" style="width:15px;height:15px;vertical-align:middle"></i></span>';
           btn.disabled = false;
           alert(result.error || 'Something went wrong. Please try again.');
         }

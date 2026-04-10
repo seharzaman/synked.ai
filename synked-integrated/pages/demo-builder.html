@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../css/global.css" />
   <link rel="stylesheet" href="../css/services.css" />
   <link rel="stylesheet" href="../css/animations.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -93,7 +94,7 @@
     #nodes-layer { position:absolute; inset:0; }
 
     .builder-node { position:absolute; width:90px; height:64px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; border-radius:4px; border:1.5px solid; cursor:pointer; user-select:none; transition:box-shadow .25s,border-color .4s,background .4s; }
-    .builder-node .ni { font-size:1.1rem; }
+    .builder-node .ni { display:flex; align-items:center; justify-content:center; width:20px; height:20px; }
     .builder-node .nl { font-family:'Space Mono',monospace; font-size:.51rem; letter-spacing:.08em; color:var(--bone); text-align:center; }
     .builder-node .nr { position:absolute; top:3px; right:5px; background:none; border:none; color:var(--night-mid); font-size:.72rem; cursor:pointer; line-height:1; padding:0; }
     .builder-node .nr:hover { color:var(--bone); }
@@ -146,6 +147,24 @@
     .demo-cta p { font-size:.9rem; color:rgba(235,220,200,.42); margin-bottom:1.7rem; }
     .btn-primary { background:var(--emerald); color:white; padding:.78rem 1.9rem; border-radius:2px; font-size:.82rem; letter-spacing:.08em; text-transform:uppercase; text-decoration:none; font-weight:500; transition:all .2s; display:inline-block; border:2px solid var(--emerald); cursor:pointer; font-family:'DM Sans',sans-serif; }
     .btn-primary:hover{ background:transparent; color:var(--emerald); }
+
+    /* Mobile touch palette */
+    @media(max-width:700px) {
+      .palette-panel { display:flex; flex-wrap:wrap; gap:.4rem; padding:.75rem; }
+      .palette-heading { width:100%; }
+      .palette-item { flex:0 0 calc(50% - .2rem); margin-bottom:0; }
+      .palette-hint { width:100%; }
+      #builder-board { height:300px; }
+      .builder-actions { flex-wrap:wrap; }
+    }
+
+    /* Dark page mobile menu override */
+    @media(max-width:768px) {
+      .mobile-menu { background: #0C1A12; }
+      .mobile-menu a { color: #EBDCC8; }
+      .mobile-menu a:hover { color: #7F8C43; }
+      .hamburger span { background: #EBDCC8; }
+    }
   </style>
 </head>
 <body>
@@ -176,7 +195,7 @@
   </div>
 
   <div class="disclaimer-banner">
-    <span>⚙️</span>
+    <span><i data-lucide="settings" style="width:22px;height:22px;vertical-align:middle;margin-right:4px;color:#7F8C43"></i></span>
     <div class="disc-text">
       <strong>Concept demo — not a real pricing tool.</strong>
       This builder illustrates how we design and connect your AI system. Cost estimates, latency figures and optimisation suggestions are simulated examples. Real system designs and pricing are scoped individually per client.
@@ -187,12 +206,13 @@
     <div class="demo-hero-inner">
       <span class="section-label">System Builder</span>
       <h1>Build Your Agent<br/>System <em>Live</em></h1>
-      <p>Drag components onto the canvas, connect them, then hit → Synk — and watch your architecture come alive with animated data flow, live metrics, and optimisation insights.</p>
+      <p>Drag components onto the canvas, connect them, then hit → Synk -
+        and watch your architecture come alive with animated data flow, live metrics, and optimisation insights.</p>
       <div class="hero-chips">
-        <span class="hero-chip">◎ LLM Orchestration</span>
-        <span class="hero-chip">⟳ Live Connections</span>
-        <span class="hero-chip">→ Animated Data Flow</span>
-        <span class="hero-chip">📊 Live Cost & Latency</span>
+        <span class="hero-chip"><i data-lucide="cpu" style="width:11px;height:11px;vertical-align:middle;margin-right:4px"></i>LLM Orchestration</span>
+        <span class="hero-chip"><i data-lucide="refresh-cw" style="width:11px;height:11px;vertical-align:middle;margin-right:4px"></i>Live Connections</span>
+        <span class="hero-chip"><i data-lucide="arrow-right" style="width:11px;height:11px;vertical-align:middle;margin-right:4px"></i>Animated Data Flow</span>
+        <span class="hero-chip"><i data-lucide="bar-chart-2" style="width:11px;height:11px;vertical-align:middle;margin-right:4px"></i>Live Cost &amp; Latency</span>
       </div>
     </div>
   </section>
@@ -200,19 +220,19 @@
   <section class="explainer-band">
     <div class="explainer-inner">
       <div class="expl-card">
-        <div class="ec-ico">🧩</div>
+        <div class="ec-ico"><i data-lucide="move" style="width:22px;height:22px;color:#7F8C43"></i></div>
         <h4>Drag & connect</h4>
-        <p>Drop AI components onto the canvas — LLM core, RAG system, API layers, caches. Click two nodes to wire them together and form your architecture.</p>
+        <p>Drop AI components onto the canvas;LLM core, RAG system, API layers, caches. Click two nodes to wire them together and form your architecture.</p>
       </div>
       <div class="expl-card">
-        <div class="ec-ico" style="font-family:'Space Mono',monospace;font-size:.8rem;letter-spacing:.05em">AUTO</div>
+        <div class="ec-ico"><i data-lucide="zap" style="width:22px;height:22px;color:#7F8C43"></i></div>
         <h4>Hit Synk — watch it live</h4>
         <p>Click Synk System and watch: animated data pulses travel your connections, nodes glow, and live cost & latency metrics count up in real time. The canvas becomes your system.</p>
       </div>
       <div class="expl-card">
-        <div class="ec-ico">💼</div>
+        <div class="ec-ico"><i data-lucide="trending-up" style="width:22px;height:22px;color:#7F8C43"></i></div>
         <h4>What this means for you</h4>
-        <p>You don't need to figure out what to build or how. We take your current tools and turn them into one clean integrated system — built, deployed and managed by us.</p>
+        <p>You don't need to figure out what to build or how. We take your current tools and turn them into one clean integrated system; built, deployed and managed by us.</p>
       </div>
     </div>
   </section>
@@ -228,12 +248,12 @@
       <div class="builder-layout">
         <div class="palette-panel">
           <div class="palette-heading">Components</div>
-          <div class="palette-item" draggable="true" data-bid="llm" style="--ac:#125842"><div class="palette-item-name">◎ LLM Core</div><div class="palette-item-desc">Language model node</div></div>
-          <div class="palette-item" draggable="true" data-bid="rag" style="--ac:#7F8C43"><div class="palette-item-name">📚 RAG System</div><div class="palette-item-desc">Knowledge retrieval</div></div>
-          <div class="palette-item" draggable="true" data-bid="api" style="--ac:#B089AA"><div class="palette-item-name">🔌 API Layer</div><div class="palette-item-desc">External integrations</div></div>
-          <div class="palette-item" draggable="true" data-bid="cache" style="--ac:#6B8FA8"><div class="palette-item-name">→ Cache</div><div class="palette-item-desc">Fast response store</div></div>
-          <div class="palette-item" draggable="true" data-bid="queue" style="--ac:#A86B3A"><div class="palette-item-name">📬 Queue</div><div class="palette-item-desc">Async job handling</div></div>
-          <div class="palette-item" draggable="true" data-bid="embed" style="--ac:#3A6B8F"><div class="palette-item-name">🔢 Embeddings</div><div class="palette-item-desc">Vector search</div></div>
+          <div class="palette-item" draggable="true" data-bid="llm" style="--ac:#125842"><div class="palette-item-name"><i data-lucide="cpu" style="width:13px;height:13px;vertical-align:middle;margin-right:4px"></i>LLM Core</div><div class="palette-item-desc">Language model node</div></div>
+          <div class="palette-item" draggable="true" data-bid="rag" style="--ac:#7F8C43"><div class="palette-item-name"><i data-lucide="book-open" style="width:13px;height:13px;vertical-align:middle;margin-right:4px"></i>RAG System</div><div class="palette-item-desc">Knowledge retrieval</div></div>
+          <div class="palette-item" draggable="true" data-bid="api" style="--ac:#B089AA"><div class="palette-item-name"><i data-lucide="plug" style="width:13px;height:13px;vertical-align:middle;margin-right:4px"></i>API Layer</div><div class="palette-item-desc">External integrations</div></div>
+          <div class="palette-item" draggable="true" data-bid="cache" style="--ac:#6B8FA8"><div class="palette-item-name"><i data-lucide="database" style="width:13px;height:13px;vertical-align:middle;margin-right:4px"></i>Cache</div><div class="palette-item-desc">Fast response store</div></div>
+          <div class="palette-item" draggable="true" data-bid="queue" style="--ac:#A86B3A"><div class="palette-item-name"><i data-lucide="inbox" style="width:13px;height:13px;vertical-align:middle;margin-right:4px"></i>Queue</div><div class="palette-item-desc">Async job handling</div></div>
+          <div class="palette-item" draggable="true" data-bid="embed" style="--ac:#3A6B8F"><div class="palette-item-name"><i data-lucide="search" style="width:13px;height:13px;vertical-align:middle;margin-right:4px"></i>Embeddings</div><div class="palette-item-desc">Vector search</div></div>
           <div class="palette-hint">↳ Drag to canvas<br/>↳ Click nodes to connect<br/>↳ Hit → Synk to animate</div>
         </div>
 
@@ -262,7 +282,7 @@
       <div class="behind-left">
         <span class="section-label">Behind the Demo</span>
         <h2>We build it.<br/>We connect it.<br/><em>You own it.</em></h2>
-        <p>The builder mirrors our actual process. We map your existing tools, identify gaps, and design a unified AI system — no guesswork, no generic templates.</p>
+        <p>The builder mirrors our actual process. We map your existing tools, identify gaps, and design a unified AI system; no guesswork, no generic templates.</p>
         <p>Every component you place on that canvas represents real infrastructure we design, build and integrate. Here's how a real engagement looks:</p>
         <ol class="step-list">
           <li>Discovery call — we map your tools, workflows and goals</li>
@@ -273,7 +293,7 @@
       </div>
       <div class="behind-right">
         <div class="q-card">
-          <p>"I don't need to figure this out — they will set everything up properly."</p>
+          <p>"I don't need to figure this out, they will set everything up properly."</p>
           <div class="q-source">— What clients tell us after onboarding</div>
         </div>
         <div class="q-card" style="border-left-color:#E08080;">
@@ -281,7 +301,7 @@
           <div class="q-source">— A note from us</div>
         </div>
         <div class="q-card" style="border-left-color:var(--night-hi);">
-          <p>"Think of this builder as a sketch pad — a way to visualise what's possible before we design the real thing together."</p>
+          <p>"Think of this builder as a sketch pad, a way to visualise what's possible before we design the real thing together."</p>
           <div class="q-source">— What this demo is</div>
         </div>
       </div>
@@ -290,7 +310,7 @@
 
   <section class="demo-cta">
     <h2>Ready to build your real system?</h2>
-    <p>Tell us what you're working with — we'll design the architecture and take it from there.</p>
+    <p>Tell us what you're working with, we'll design the architecture and take it from there.</p>
     <a href="contact.html" class="btn-primary">Start the Conversation</a>
   </section>
 
@@ -331,13 +351,22 @@
   <script>
   (function(){
     // ── NODE CONFIG ──────────────────────────────────────────────────────────
+    // Inline Lucide SVGs for builder nodes
+    const SVG = {
+      cpu:      '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M9 2v2M2 15h2M2 9h2M15 22v-2M9 22v-2M22 15h-2M22 9h-2"/></svg>',
+      book:     '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+      plug:     '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8H6a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0v-4a2 2 0 0 0-2-2Z"/></svg>',
+      db:       '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>',
+      inbox:    '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
+      search:   '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>',
+    };
     const BT = {
-      llm:   {icon:'🧠', label:'LLM Core',    color:'#125842', cost:0.042, lat:380},
-      rag:   {icon:'📚', label:'RAG System',   color:'#7F8C43', cost:0.018, lat:210},
-      api:   {icon:'🔌', label:'API Layer',    color:'#B089AA', cost:0.006, lat:95 },
-      cache: {icon:'⚡', label:'Cache',         color:'#6B8FA8', cost:0.001, lat:12 },
-      queue: {icon:'📬', label:'Queue',         color:'#A86B3A', cost:0.003, lat:45 },
-      embed: {icon:'🔢', label:'Embeddings',   color:'#3A6B8F', cost:0.009, lat:120},
+      llm:   {icon:'cpu',   label:'LLM Core',    color:'#125842', cost:0.042, lat:380},
+      rag:   {icon:'book',  label:'RAG System',  color:'#7F8C43', cost:0.018, lat:210},
+      api:   {icon:'plug',  label:'API Layer',   color:'#B089AA', cost:0.006, lat:95 },
+      cache: {icon:'db',    label:'Cache',        color:'#6B8FA8', cost:0.001, lat:12 },
+      queue: {icon:'inbox', label:'Queue',        color:'#A86B3A', cost:0.003, lat:45 },
+      embed: {icon:'search',label:'Embeddings',  color:'#3A6B8F', cost:0.009, lat:120},
     };
 
     const board     = document.getElementById('builder-board');
@@ -417,7 +446,7 @@
         const el=document.createElement('div');
         el.className='builder-node'+(isSel?' sel-node':'')+(isSynked?' synked-node':'');
         el.style.cssText=`left:${pl.x}px;top:${pl.y}px;background:${isSynked?bt.color+'18':'rgba(12,26,18,.9)'};border-color:${isSynked?bt.color:isSel?bt.color:bt.color+'88'};`;
-        el.innerHTML=`<span class="ni">${bt.icon}</span><span class="nl">${bt.label}</span><button class="nr" data-i="${idx}">×</button>`;
+        el.innerHTML=`<span class="ni" style="color:${isSynked?bt.color:'rgba(168,212,188,.7)'}">${SVG[bt.icon]||''}</span><span class="nl">${bt.label}</span><button class="nr" data-i="${idx}">×</button>`;
 
         el.addEventListener('mousedown',e=>{
           if(e.target.classList.contains('nr')) return;
@@ -426,6 +455,15 @@
           dOff={x:e.clientX-er.left, y:e.clientY-er.top};
           dragIdx=idx;
         });
+        // Touch move for nodes
+        el.addEventListener('touchstart',e=>{
+          if(e.target.classList.contains('nr')) return;
+          e.stopPropagation(); e.preventDefault();
+          const touch=e.touches[0];
+          const r=board.getBoundingClientRect(), er=el.getBoundingClientRect();
+          dOff={x:touch.clientX-er.left, y:touch.clientY-er.top};
+          dragIdx=idx;
+        },{passive:false});
 
         el.addEventListener('click',e=>{
           if(e.target.classList.contains('nr')||dragIdx!==null) return;
@@ -472,10 +510,34 @@
       redraw();
     });
     document.addEventListener('mouseup',()=>{ dragIdx=null; });
+    // Touch move/end for nodes on board
+    document.addEventListener('touchmove',e=>{
+      if(dragIdx===null) return;
+      e.preventDefault();
+      const touch=e.touches[0];
+      const r=board.getBoundingClientRect();
+      placed[dragIdx].x=Math.max(0,Math.min(r.width-90,touch.clientX-r.left-dOff.x));
+      placed[dragIdx].y=Math.max(0,Math.min(r.height-64,touch.clientY-r.top-dOff.y));
+      redraw();
+    },{passive:false});
+    document.addEventListener('touchend',()=>{ dragIdx=null; });
 
     // ── DROP FROM PALETTE ────────────────────────────────────────────────────
     document.querySelectorAll('.palette-item[draggable]').forEach(it=>{
       it.addEventListener('dragstart',e=>e.dataTransfer.setData('bid',it.dataset.bid));
+      // Touch: tap palette item to add to center of board
+      it.addEventListener('touchend',e=>{
+        e.preventDefault();
+        const bid=it.dataset.bid; if(!bid) return;
+        const r=board.getBoundingClientRect();
+        const cx=Math.round(r.width/2 - 45 + (Math.random()-.5)*80);
+        const cy=Math.round(r.height/2 - 32 + (Math.random()-.5)*60);
+        placed.push({bid, x:Math.max(4,Math.min(r.width-94,cx)), y:Math.max(4,Math.min(r.height-68,cy)), id:nodeCount++});
+        markUnsyked(); redraw();
+        // Flash feedback
+        it.style.background='rgba(127,140,67,.2)';
+        setTimeout(()=>{it.style.background='';},300);
+      },{passive:false});
     });
     board.addEventListener('dragover',e=>{e.preventDefault();board.classList.add('drag-over');});
     board.addEventListener('dragleave',()=>board.classList.remove('drag-over'));
@@ -576,6 +638,7 @@
 
     redraw();
   })();
+  if(window.lucide) lucide.createIcons();
   </script>
 </body>
 </html>

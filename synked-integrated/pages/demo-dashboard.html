@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../css/global.css" />
   <link rel="stylesheet" href="../css/services.css" />
   <link rel="stylesheet" href="../css/animations.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -131,6 +132,33 @@
       .agent-header-row,.agent-row{ grid-template-columns:10px 1fr 65px 60px 70px; }
       .agent-header-row>*:nth-child(n+5),.agent-row>*:nth-child(n+5){ display:none; }
     }
+
+    /* IMPROVED mobile agent rows */
+    @media(max-width:600px) {
+      .agent-header-row { display:none; }
+      .agent-row {
+        grid-template-columns: 10px 1fr auto !important;
+        gap:.5rem !important;
+        padding:.9rem .9rem !important;
+        flex-wrap:wrap;
+      }
+      .agent-row > *:nth-child(n+4) { display:none !important; }
+      .agent-row > *:nth-child(3) { display:block !important; }
+      .a-name { font-size:.72rem !important; }
+      .fix-panel { padding:.9rem !important; }
+      .fix-actions { flex-direction:column; align-items:flex-start; }
+      .btn-fix { width:100%; text-align:center; }
+      .summary-strip { flex-wrap:wrap; }
+      .sum-card { min-width:calc(50% - .35rem); flex:none; }
+    }
+
+    /* Dark page mobile menu override */
+    @media(max-width:768px) {
+      .mobile-menu { background: #0C1A12; }
+      .mobile-menu a { color: #EBDCC8; }
+      .mobile-menu a:hover { color: #7F8C43; }
+      .hamburger span { background: #EBDCC8; }
+    }
   </style>
 </head>
 <body>
@@ -160,25 +188,28 @@
     <a href="contact.html">Contact</a>
   </div>
 
+  
   <div class="disclaimer-banner">
-    <span style="font-family:'Space Mono',monospace;font-size:.7rem">NOTE</span>
+    <span><i data-lucide="settings" style="width:22px;height:22px;vertical-align:middle;margin-right:4px;color:#7F8C43"></i></span>
     <div class="disc-text">
-      <strong>Concept demo — not real data.</strong>
-      This dashboard illustrates how we monitor and fix your AI agents in production.
-      All agents, metrics and fix steps shown are simulated examples. Real outputs and pricing are scoped per client.
+      <strong>Concept demo — not a real data tool.</strong>
+      This dashboard illustrates how we how we monitor and fix your AI agents in production.
+      All agents, metrics and fix steps shown are simulated examples. Real system designs and pricing are scoped individually per client.
     </div>
   </div>
+
+  
 
   <section class="demo-hero">
     <div class="demo-hero-inner">
       <span class="section-label">Health Monitor</span>
       <h1>Agent Health<br/><em>Dashboard</em></h1>
-      <p>Real-time visibility across every agent. Click a degraded or failing agent, hit Apply Fixes, and watch the metrics recover — step by step.</p>
+      <p>Real-time visibility across every agent. Click a degraded or failing agent, hit Apply Fixes, and watch the metrics recover, step by step.</p>
       <div class="hero-chips">
-        <span class="hero-chip">● Live Status</span>
-        <span class="hero-chip">→ Step-by-Step Recovery</span>
-        <span class="hero-chip">▦ Live Metric Updates</span>
-        <span class="hero-chip">◎ Incident Resolution</span>
+        <span class="hero-chip"><i data-lucide="circle-dot" style="width:11px;height:11px;vertical-align:middle;margin-right:3px"></i>Live Status</span>
+        <span class="hero-chip"><i data-lucide="arrow-right" style="width:11px;height:11px;vertical-align:middle;margin-right:3px"></i>Step-by-Step Recovery</span>
+        <span class="hero-chip"><i data-lucide="bar-chart-2" style="width:11px;height:11px;vertical-align:middle;margin-right:3px"></i>Live Metric Updates</span>
+        <span class="hero-chip"><i data-lucide="shield-check" style="width:11px;height:11px;vertical-align:middle;margin-right:3px"></i>Incident Resolution</span>
       </div>
     </div>
   </section>
@@ -186,19 +217,19 @@
   <section class="explainer-band">
     <div class="explainer-inner">
       <div class="expl-card">
-        <div class="ec-ico" style="font-family:'Space Mono',monospace;font-size:.8rem;letter-spacing:.05em">VIEW</div>
+        <div class="ec-ico"><i data-lucide="monitor" style="width:20px;height:20px;color:#7F8C43"></i></div>
         <h4>What you're seeing</h4>
-        <p>A live control panel for your deployed AI agents. Each row shows real-time health, latency, error rate and uptime — exactly how we monitor your systems.</p>
+        <p>A live control panel for your deployed AI agents. Each row shows real-time health, latency, error rate and uptime, exactly how we monitor your systems.</p>
       </div>
       <div class="expl-card">
-        <div class="ec-ico" style="font-family:'Space Mono',monospace;font-size:.8rem;letter-spacing:.05em">FIX</div>
+        <div class="ec-ico"><i data-lucide="wrench" style="width:20px;height:20px;color:#7F8C43"></i></div>
         <h4>Click to fix — for real</h4>
         <p>Click any Degraded or Failing agent. Hit Apply Fixes and watch: each step runs, the progress bar fills, and the metrics on that row visibly recover. Green means fixed.</p>
       </div>
       <div class="expl-card">
-        <div class="ec-ico" style="font-family:'Space Mono',monospace;font-size:.8rem;letter-spacing:.05em">ROI</div>
+        <div class="ec-ico"><i data-lucide="trending-up" style="width:20px;height:20px;color:#7F8C43"></i></div>
         <h4>What this means for you</h4>
-        <p>You won't touch any of this. We watch it 24/7, catch issues before they hit your users, and push fixes — all within our managed service. You get a report.</p>
+        <p>You won't touch any of this. We watch it 24/7, catch issues before they hit your users, and push fixes, all within our managed service. You get a report.</p>
       </div>
     </div>
   </section>
@@ -230,8 +261,8 @@
       <div class="behind-left">
         <span class="section-label">Behind the Demo</span>
         <h2>We monitor.<br/>We fix.<br/><em>You focus.</em></h2>
-        <p>The dashboard above reflects how we manage AI in production for real clients. Every metric is something we track around the clock — latency spikes, error surges, uptime drops.</p>
-        <p>When an agent degrades we see it first. When it fails we fix it. You receive a report — not a panic call at 2am.</p>
+        <p>The dashboard above reflects how we manage AI in production for real clients. Every metric is something we track around the clock; latency spikes, error surges, uptime drops.</p>
+        <p>When an agent degrades we see it first. When it fails we fix it. You receive a report, not a panic call at 2am.</p>
         <ul class="check-list">
           <li>24/7 uptime monitoring across all deployed agents</li>
           <li>Automated alerts with root-cause analysis</li>
@@ -242,7 +273,7 @@
       </div>
       <div class="behind-right">
         <div class="q-card">
-          <p>"I don't need to worry if my AI breaks — they handle it."</p>
+          <p>"I don't need to worry if my AI breaks, they handle it."</p>
           <div class="q-source">— What clients tell us after onboarding</div>
         </div>
         <div class="q-card" style="border-left-color:#E08080;">
@@ -250,7 +281,7 @@
           <div class="q-source">— A note from us</div>
         </div>
         <div class="q-card" style="border-left-color:var(--night-hi);">
-          <p>"Think of this as a window into what ongoing management looks like — not a quote or guarantee."</p>
+          <p>"Think of this as a window into what ongoing management looks like; not a quote or guarantee."</p>
           <div class="q-source">— What this demo is</div>
         </div>
       </div>
@@ -259,7 +290,7 @@
 
   <section class="demo-cta">
     <h2>Want a dashboard like this for your AI?</h2>
-    <p>Tell us what you're building — we'll keep it running.</p>
+    <p>Tell us what you're building, we'll keep it running.</p>
     <a href="contact.html" class="btn-primary">Start the Conversation</a>
   </section>
 
@@ -512,6 +543,7 @@
 
   renderSummary();
   renderAgents();
+  if(window.lucide) lucide.createIcons();
   </script>
 </body>
 </html>
