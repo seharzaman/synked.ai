@@ -1,0 +1,53 @@
+[
+  {
+    "id": 1776700639372,
+    "timestamp": "2026-04-20T15:57:19.372Z",
+    "name": "sehar",
+    "email": "sehar@100xseller.com",
+    "company": "100xsellers",
+    "industry": "other",
+    "interests": [
+      "agents"
+    ],
+    "message": "wassaaaapppp!"
+  },
+  {
+    "id": 1776701918673,
+    "timestamp": "2026-04-20T16:18:38.673Z",
+    "name": "sehar",
+    "email": "sehar@100xsellers.com",
+    "company": "100xsellers",
+    "industry": "other",
+    "interests": [
+      "agents",
+      "management"
+    ],
+    "message": "i have a problem\n"
+  },
+  {
+    "id": 1776702705104,
+    "timestamp": "2026-04-20T16:31:45.104Z",
+    "name": "sehar zaman",
+    "email": "seharzaman3@gmail.com",
+    "company": "blah ",
+    "industry": "startup",
+    "interests": [
+      "rag",
+      "workflow",
+      "management"
+    ],
+    "message": "call me "
+  },
+  {
+    "id": 1776703321652,
+    "timestamp": "2026-04-20T16:42:01.652Z",
+    "name": "seharrrrrz",
+    "email": "sehar@100xsellers.com",
+    "company": "100xsellers",
+    "industry": "other",
+    "interests": [
+      "agents"
+    ],
+    "message": ";)"
+  }
+]
