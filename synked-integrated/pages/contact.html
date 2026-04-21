@@ -111,6 +111,9 @@
     <!-- CONTACT FORM -->
     <div class="contact-right">
       <div class="contact-form-wrap">
+        <!--
+          Legacy custom form kept intentionally (commented out) per request.
+          Replaced by embedded GHL form below while preserving section layout.
         <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
           <div class="form-row">
             <div class="form-group">
@@ -176,6 +179,30 @@
           <h3>Message received.</h3>
           <p>Thank you for reaching out. Our team will review your message and get back to you within 24 hours.</p>
         </div>
+        -->
+
+        <!-- GHL inline form embed: this replaces the custom form UI in-place. -->
+        <div class="contact-form ghl-form-embed" style="min-height:1106px;">
+          <iframe
+            src="https://api.leadconnectorhq.com/widget/form/VdX10GaaYT1eVph0ngwE"
+            style="width:100%;height:100%;border:none;border-radius:8px"
+            id="inline-VdX10GaaYT1eVph0ngwE"
+            data-layout="{'id':'INLINE'}"
+            data-trigger-type="alwaysShow"
+            data-trigger-value=""
+            data-activation-type="alwaysActivated"
+            data-activation-value=""
+            data-deactivation-type="neverDeactivate"
+            data-deactivation-value=""
+            data-form-name="Contact Form"
+            data-height="1106"
+            data-layout-iframe-id="inline-VdX10GaaYT1eVph0ngwE"
+            data-form-id="VdX10GaaYT1eVph0ngwE"
+            title="Contact Form"
+          ></iframe>
+        </div>
+        <!-- Required GHL embed script for iframe initialization and resizing behavior. -->
+        <script src="https://link.msgsndr.com/js/form_embed.js"></script>
       </div>
     </div>
   </section>
@@ -216,6 +243,9 @@
   <script src="../js/animations.js"></script>
   <script>
     if(window.lucide) lucide.createIcons();
+    /*
+      Legacy custom form submit handler is intentionally retained but disabled,
+      because the page now uses the embedded GHL form instead of this handler.
     async function handleSubmit(e) {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
@@ -253,6 +283,7 @@
         document.getElementById('formSuccess').style.display = 'flex';
       }
     }
+    */
   </script>
 </body>
 </html>
