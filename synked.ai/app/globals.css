@@ -1,0 +1,336 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─── Synked.ai Design Tokens ─── */
+@theme inline {
+  /* shadcn plumbing */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Synked brand colors */
+  --color-bone: #ebdcc8;
+  --color-taupe: #b089aa;
+  --color-emerald: #125842;
+  --color-emerald-lt: #1a7a5e;
+  --color-pistachio: #7f8c43;
+  --color-espresso: #3f2a1c;
+  --color-cream: #f5eee4;
+  --color-off-white: #f7f4ef;
+
+  /* Dark / demo page colors */
+  --color-night: #0c1a12;
+  --color-night-surf: #102018;
+  --color-night-bord: #1c3528;
+  --color-night-mid: #3a6650;
+  --color-night-hi: #a8d4bc;
+  --color-night-mono: #6bb89a;
+
+  /* Typography */
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono-space);
+  --font-heading: var(--font-display);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+
+  /* Radii */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ─── Light theme (default) – Synked.ai palette ─── */
+:root {
+  --background: #f7f4ef;
+  --foreground: #3f2a1c;
+  --card: #f7f4ef;
+  --card-foreground: #3f2a1c;
+  --popover: #ffffff;
+  --popover-foreground: #3f2a1c;
+  --primary: #125842;
+  --primary-foreground: #ebdcc8;
+  --secondary: #7f8c43;
+  --secondary-foreground: #ffffff;
+  --muted: #f5eee4;
+  --muted-foreground: #4a4840;
+  --accent: #b089aa;
+  --accent-foreground: #ffffff;
+  --destructive: #e08080;
+  --border: rgba(0, 0, 0, 0.08);
+  --input: rgba(0, 0, 0, 0.08);
+  --ring: #125842;
+  --chart-1: #125842;
+  --chart-2: #7f8c43;
+  --chart-3: #b089aa;
+  --chart-4: #ebdcc8;
+  --chart-5: #3f2a1c;
+  --radius: 0.375rem;
+  --sidebar: #f5eee4;
+  --sidebar-foreground: #3f2a1c;
+  --sidebar-primary: #125842;
+  --sidebar-primary-foreground: #ebdcc8;
+  --sidebar-accent: #f5eee4;
+  --sidebar-accent-foreground: #3f2a1c;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-ring: #125842;
+  --nav-h: 72px;
+  --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ─── Dark theme — demo pages (night palette) ─── */
+.dark {
+  --background: #0c1a12;
+  --foreground: #a8d4bc;
+  --card: #102018;
+  --card-foreground: #a8d4bc;
+  --popover: #102018;
+  --popover-foreground: #a8d4bc;
+  --primary: #125842;
+  --primary-foreground: #ebdcc8;
+  --secondary: #7f8c43;
+  --secondary-foreground: #ffffff;
+  --muted: #1c3528;
+  --muted-foreground: #6bb89a;
+  --accent: #b089aa;
+  --accent-foreground: #ffffff;
+  --destructive: #e08080;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: #7f8c43;
+  --chart-1: #a8d4bc;
+  --chart-2: #6bb89a;
+  --chart-3: #3a6650;
+  --chart-4: #7f8c43;
+  --chart-5: #b089aa;
+  --sidebar: #102018;
+  --sidebar-foreground: #a8d4bc;
+  --sidebar-primary: #125842;
+  --sidebar-primary-foreground: #ebdcc8;
+  --sidebar-accent: #1c3528;
+  --sidebar-accent-foreground: #a8d4bc;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #7f8c43;
+}
+
+/* ─── Base layer ─── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    overflow-x: hidden;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #125842;
+    border-radius: 2px;
+  }
+}
+
+/* ─── @keyframes ─── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-100vh) scale(0.3);
+    opacity: 0;
+  }
+}
+@keyframes morphBlob {
+  0% {
+    border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    border-radius: 50% 50% 40% 60% / 40% 60% 40% 60%;
+    transform: scale(1.05) rotate(5deg);
+  }
+  50% {
+    border-radius: 60% 40% 50% 50% / 50% 50% 60% 40%;
+    transform: scale(0.98) rotate(-3deg);
+  }
+  75% {
+    border-radius: 45% 55% 55% 45% / 55% 45% 55% 45%;
+    transform: scale(1.02) rotate(2deg);
+  }
+  100% {
+    border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
+    transform: scale(1) rotate(0deg);
+  }
+}
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+@keyframes typingDot {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+@keyframes barFill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+@keyframes rotateSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes successPop {
+  0% {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes indicatorPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.85);
+  }
+}
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
