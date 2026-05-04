@@ -20,10 +20,6 @@ export function PulseSection() {
         overflow: "hidden",
       }}
     >
-      <div style={{ position: "absolute", inset: 0 }}>
-        <PulseCanvas />
-      </div>
-
       {/* Header */}
       <div
         style={{
@@ -62,7 +58,9 @@ export function PulseSection() {
           maxWidth: 940,
           margin: "0 auto 3rem",
         }}
-      />
+      >
+        <PulseCanvas />
+      </div>
 
       {/* Nodes */}
       <div
@@ -82,6 +80,8 @@ export function PulseSection() {
           return (
             <ScrollReveal key={node.label} delay={i * 0.1}>
               <div
+                className="pulse-node"
+                data-pulse-node
                 style={{
                   background: "rgba(235,220,200,.055)",
                   border: "1px solid rgba(235,220,200,.12)",
@@ -95,35 +95,56 @@ export function PulseSection() {
                   transition: "all .35s cubic-bezier(.16,1,.3,1)",
                 }}
               >
+                {/* Top accent bar (::before equivalent) */}
                 <span
+                  className="pulse-node-bar"
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: 2,
+                    background:
+                      "linear-gradient(90deg,transparent,var(--color-pistachio),transparent)",
+                    transform: "scaleX(0)",
+                    transformOrigin: "center",
+                    transition: "transform .4s",
+                  }}
+                />
+                <span
+                  className="pulse-node-icon"
                   style={{
                     fontSize: "1.3rem",
                     marginBottom: "0.7rem",
                     display: "block",
                     filter: "grayscale(.4)",
+                    transition: "filter .35s",
                   }}
                 >
                   <Icon style={{ width: 18, height: 18, color: "#7F8C43" }} />
                 </span>
                 <div
-                  className="font-mono"
+                  className="pulse-node-title font-mono"
                   style={{
                     fontSize: "0.6rem",
                     letterSpacing: "0.16em",
                     textTransform: "uppercase" as const,
                     color: "var(--color-bone)",
                     opacity: 0.55,
+                    transition: "opacity .35s, color .35s",
                   }}
                 >
                   {node.label}
                 </div>
                 <div
+                  className="pulse-node-sub"
                   style={{
                     fontSize: "0.78rem",
                     color: "var(--color-bone)",
                     opacity: 0.35,
                     marginTop: "0.35rem",
                     lineHeight: 1.4,
+                    transition: "opacity .35s",
                   }}
                 >
                   {node.sub}

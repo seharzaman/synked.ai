@@ -9,7 +9,8 @@ export function HeroCanvas() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let W: number, H: number;
+    let W = window.innerWidth;
+    let H = window.innerHeight;
     const mouse = { x: -999, y: -999 };
 
     function resize() {
@@ -84,7 +85,17 @@ export function HeroCanvas() {
     }
 
     const particles: P[] = [];
-    for (let i = 0; i < 110; i++) particles.push(new P());
+    // Scale particle count by screen area — 110 at 1440×900, fewer on mobile
+    const baseArea = 1440 * 900;
+    const screenArea = W * H;
+    const count = Math.max(
+      25,
+      Math.min(110, Math.round(110 * (screenArea / baseArea))),
+    );
+    // Scale connection distance too — tighter on small screens
+    const connDist = W < 600 ? 100 : 140;
+    const connDist2 = connDist * connDist;
+    for (let i = 0; i < count; i++) particles.push(new P());
 
     function drawLines() {
       const len = particles.length;
@@ -93,17 +104,16 @@ export function HeroCanvas() {
         for (let j = i + 1; j < len; j++) {
           const pj = particles[j];
           const dx = pi.x - pj.x;
-          if (dx > 140 || dx < -140) continue; // fast axis skip
+          if (dx > connDist || dx < -connDist) continue;
           const dy = pi.y - pj.y;
-          if (dy > 140 || dy < -140) continue;
+          if (dy > connDist || dy < -connDist) continue;
           const d2 = dx * dx + dy * dy;
-          if (d2 < 19600) {
-            // 140²
+          if (d2 < connDist2) {
             const d = Math.sqrt(d2);
             ctx!.beginPath();
             ctx!.moveTo(pi.x, pi.y);
             ctx!.lineTo(pj.x, pj.y);
-            ctx!.strokeStyle = `rgba(18,88,66,${(1 - d / 140) * 0.22})`;
+            ctx!.strokeStyle = `rgba(18,88,66,${(1 - d / connDist) * 0.22})`;
             ctx!.lineWidth = 0.8;
             ctx!.stroke();
           }

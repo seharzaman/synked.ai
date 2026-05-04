@@ -361,6 +361,29 @@
   }
 }
 
+/* ── Pulse Node Lit State ── */
+.pulse-node.lit {
+  border-color: rgba(127, 140, 67, 0.55) !important;
+  background: rgba(127, 140, 67, 0.1) !important;
+  transform: translateY(-5px);
+  box-shadow:
+    0 8px 32px rgba(127, 140, 67, 0.2),
+    0 0 0 1px rgba(127, 140, 67, 0.2);
+}
+.pulse-node.lit .pulse-node-bar {
+  transform: scaleX(1) !important;
+}
+.pulse-node.lit .pulse-node-icon {
+  filter: grayscale(0) !important;
+}
+.pulse-node.lit .pulse-node-title {
+  opacity: 1 !important;
+  color: var(--color-pistachio) !important;
+}
+.pulse-node.lit .pulse-node-sub {
+  opacity: 0.75 !important;
+}
+
 /* ── Responsive: match old site media queries ── */
 @media (max-width: 900px) {
   .overlap-grid {
