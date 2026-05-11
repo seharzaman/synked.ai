@@ -1,0 +1,396 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id             String          @id
+  name           String
+  email          String
+  emailVerified  Boolean         @default(false)
+  image          String?
+  role           String          @default("user")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  sessions       Session[]
+  accounts       Account[]
+  activityLogs   ActivityLog[]
+  blueprints     Blueprint[]
+  agentTemplates AgentTemplate[]
+  insights       Insight[]
+  projects       Project[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+enum CompanyStatus {
+  active
+  inactive
+  prospect
+}
+
+enum ClientStatus {
+  active
+  inactive
+  lead
+}
+
+enum AgentStatus {
+  ok
+  degraded
+  failing
+  offline
+}
+
+enum ProjectStatus {
+  discovery
+  active
+  delivered
+  paused
+}
+
+enum AuditStatus {
+  in_progress
+  completed
+  expired
+}
+
+enum BlueprintCategory {
+  agent
+  workflow
+  rag
+  full_system
+}
+
+enum DeliverableType {
+  agent
+  workflow
+  integration
+  custom
+}
+
+enum GraphPattern {
+  conversational
+  pipeline
+  reactive
+  team_orchestrator
+  team_autonomous
+}
+
+model Company {
+  id        String        @id @default(cuid())
+  name      String
+  industry  String?
+  website   String?
+  status    CompanyStatus @default(prospect)
+  notes     String?
+  phone     String?
+  email     String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  clients   Client[]
+  agents    AIAgent[]
+  projects  Project[]
+  audits    AuditReport[]
+
+  @@map("company")
+}
+
+model Client {
+  id                 String       @id @default(cuid())
+  name               String
+  email              String
+  phone              String?
+  title              String?
+  status             ClientStatus @default(lead)
+  notes              String?
+  qualificationScore Int?
+  serviceInterest    String[]     @default([])
+  budgetRange        String?
+  message            String?
+  companyId          String?
+  company            Company?     @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  agents             AIAgent[]
+  projects           Project[]
+  audits             AuditReport[]
+
+  @@index([companyId])
+  @@map("client")
+}
+
+model AIAgent {
+  id              String         @id @default(cuid())
+  name            String
+  type            String
+  status          AgentStatus    @default(offline)
+  description     String?
+  config          Json?
+  version         Int            @default(1)
+  deploymentUrl   String?
+  deploymentId    String?
+  deploymentStatus String?
+  channels        String[]       @default([])
+  companyId       String?
+  company         Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  clientId        String?
+  client          Client?        @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  templateId      String?
+  template        AgentTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  projectId       String?
+  project         Project?       @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  metrics         AgentMetrics[]
+  deliverables    ProjectDeliverable[]
+
+  @@index([companyId])
+  @@index([clientId])
+  @@index([templateId])
+  @@index([projectId])
+  @@map("ai_agent")
+}
+
+model AgentMetrics {
+  id          String   @id @default(cuid())
+  agentId     String
+  agent       AIAgent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  latency     Float?
+  successRate Float?
+  errorCount  Int      @default(0)
+  rpm         Float?
+  uptime      Float?
+  recordedAt  DateTime @default(now())
+
+  @@index([agentId])
+  @@index([recordedAt])
+  @@map("agent_metrics")
+}
+
+model ActivityLog {
+  id         String   @id @default(cuid())
+  action     String
+  entityType String
+  entityId   String
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  details    Json?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("activity_log")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// ─── Synked OS Models ───────────────────────────────────────────
+
+model Project {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  config      Json?
+  status      ProjectStatus @default(discovery)
+  industry    String?
+  startDate   DateTime?
+  endDate     DateTime?
+  budget      Float?
+  userId      String?
+  user        User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  companyId   String?
+  company     Company?      @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  clientId    String?
+  client      Client?       @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  auditId     String?
+  audit       AuditReport?  @relation(fields: [auditId], references: [id], onDelete: SetNull)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deliverables ProjectDeliverable[]
+  agents      AIAgent[]
+
+  @@index([userId])
+  @@index([companyId])
+  @@index([clientId])
+  @@index([auditId])
+  @@index([status])
+  @@map("project")
+}
+
+model AuditReport {
+  id                  String      @id @default(cuid())
+  threadId            String?     @unique
+  contactName         String
+  contactEmail        String
+  contactRole         String?
+  websiteUrl          String?
+  crawlData           Json?
+  scores              Json
+  overallScore        Int
+  opportunities       Json
+  recommendedStack    Json
+  roadmap             Json
+  roi                 Json
+  summary             String
+  selectedDepartments String[]    @default([])
+  answers             Json?
+  status              AuditStatus @default(in_progress)
+  companyId           String?
+  company             Company?    @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  clientId            String?
+  client              Client?     @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  completedAt         DateTime?
+  createdAt           DateTime    @default(now())
+  projects            Project[]
+
+  @@index([companyId])
+  @@index([clientId])
+  @@index([status])
+  @@map("audit_report")
+}
+
+model Blueprint {
+  id             String            @id @default(cuid())
+  name           String
+  slug           String            @unique
+  description    String?
+  industry       String?
+  category       BlueprintCategory
+  steps          Json
+  estimatedHours Int?
+  estimatedROI   String?
+  tags           String[]          @default([])
+  usageCount     Int               @default(0)
+  createdById    String?
+  createdBy      User?             @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  deliverables   ProjectDeliverable[]
+
+  @@index([category])
+  @@index([industry])
+  @@map("blueprint")
+}
+
+model ProjectDeliverable {
+  id          String         @id @default(cuid())
+  name        String
+  description String?
+  type        DeliverableType
+  config      Json?
+  outcome     Json?
+  notes       String?
+  projectId   String
+  project     Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  blueprintId String?
+  blueprint   Blueprint?     @relation(fields: [blueprintId], references: [id], onDelete: SetNull)
+  agentId     String?
+  agent       AIAgent?       @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  completedAt DateTime?
+  createdAt   DateTime       @default(now())
+
+  @@index([projectId])
+  @@index([blueprintId])
+  @@index([agentId])
+  @@map("project_deliverable")
+}
+
+model AgentTemplate {
+  id           String       @id @default(cuid())
+  name         String
+  description  String?
+  type         String
+  graphPattern GraphPattern @default(conversational)
+  baseConfig   Json?
+  systemPrompt String?
+  teamConfig   Json?
+  category     String?
+  tags         String[]     @default([])
+  usageCount   Int          @default(0)
+  createdById  String?
+  createdBy    User?        @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  agents       AIAgent[]
+
+  @@index([category])
+  @@index([graphPattern])
+  @@map("agent_template")
+}
+
+model Insight {
+  id                  String   @id @default(cuid())
+  industry            String
+  category            String
+  finding             String
+  evidenceCount       Int      @default(1)
+  avgROI              String?
+  relatedBlueprintIds String[] @default([])
+  tags                String[] @default([])
+  createdById         String?
+  createdBy           User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([industry])
+  @@index([category])
+  @@map("insight")
+}
